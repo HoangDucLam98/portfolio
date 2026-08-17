@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Gamepad2, Sparkles, BookOpen } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
 import { soundManager } from '../../audio/audioEngine';
+import { achievementsManager } from '../../game/achievements';
 
 interface AboutOverlayProps {
   onGoToProjects: () => void;
@@ -24,6 +25,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
   const handleCommand = (cmd: string) => {
     const trimmed = cmd.trim().toLowerCase();
     soundManager.playClick();
+    achievementsManager.unlock('terminal_hacker');
 
     const newHistory: TerminalHistoryItem[] = [
       ...history,

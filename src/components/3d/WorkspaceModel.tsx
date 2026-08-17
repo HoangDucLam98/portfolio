@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { RoundedBox, Float, ContactShadows } from '@react-three/drei';
 import { soundManager } from '../../audio/audioEngine';
+import { achievementsManager } from '../../game/achievements';
 
 // Procedural texture for the Bright Cartoon Game Engine Screen
 function createGameEngineTexture(): THREE.CanvasTexture {
@@ -501,6 +502,10 @@ export function WorkspaceModel() {
         position={[1.2, 0.68, -0.35]}
         onPointerOver={() => handleHover('Coffee')}
         onPointerOut={() => setHovered(null)}
+        onClick={() => {
+          soundManager.playClick();
+          achievementsManager.trackCoffeeClick();
+        }}
       >
         <mesh castShadow>
           <cylinderGeometry args={[0.12, 0.095, 0.24, 32]} />
