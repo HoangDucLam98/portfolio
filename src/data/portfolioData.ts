@@ -1,5 +1,7 @@
 import type { ProjectItem } from '../types';
 
+const baseUrl = import.meta.env.BASE_URL || '/';
+
 export const personalInfo = {
   name: "Hoang Duc Lam",
   title: "Gameplay Programmer & Technical 3D Game Artist",
@@ -66,6 +68,7 @@ export const projectsData: ProjectItem[] = [
     githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#8da178",
     glowColor: "rgba(141, 161, 120, 0.4)",
+    imageUrl: `${baseUrl}games/color-flow.jpg`,
     modelType: "potion"
   },
   {
@@ -91,6 +94,7 @@ export const projectsData: ProjectItem[] = [
     githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#ff8a80",
     glowColor: "rgba(255, 138, 128, 0.4)",
+    imageUrl: `${baseUrl}games/survival-hero.jpg`,
     modelType: "star"
   },
   {
@@ -116,6 +120,7 @@ export const projectsData: ProjectItem[] = [
     githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#ffd166",
     glowColor: "rgba(255, 209, 102, 0.4)",
+    imageUrl: `${baseUrl}games/supermarket-journey.jpg`,
     modelType: "cartridge"
   },
   {
@@ -141,6 +146,7 @@ export const projectsData: ProjectItem[] = [
     githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#70b0d0",
     glowColor: "rgba(112, 176, 208, 0.4)",
+    imageUrl: `${baseUrl}games/prison-escape.jpg`,
     modelType: "gem"
   }
 ];

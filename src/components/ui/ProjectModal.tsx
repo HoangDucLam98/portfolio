@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2, Layers, Gamepad2, Sparkles, Code2, Play } from 'lucide-react';
+import { X, CheckCircle2, Layers, Gamepad2, Sparkles, Code2, Play, ExternalLink } from 'lucide-react';
 import type { ProjectItem } from '../../types';
 import { soundManager } from '../../audio/audioEngine';
 
@@ -49,11 +49,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
           className="relative z-10 w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl glass-panel-glow border-2 border-[#8da178] p-6 sm:p-8 shadow-2xl bg-white text-[#38271e] flex flex-col gap-6"
         >
           {/* Header */}
-          <div className="flex items-start justify-between border-b-2 border-[#e6d8cb] pb-5">
+          <div className="flex items-start justify-between border-b-2 border-[#e6d8cb] pb-4">
             <div>
-              <div className="flex items-center gap-2 mb-2">
+              <div className="flex items-center gap-2 mb-1.5">
                 <span
-                  className="px-3 py-1 rounded-full text-xs font-heading font-bold tracking-wider uppercase"
+                  className="px-3 py-0.5 rounded-full text-xs font-heading font-bold tracking-wider uppercase"
                   style={{
                     backgroundColor: `${project.color}25`,
                     color: project.color,
@@ -69,7 +69,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#38271e] tracking-tight">
                 {project.title}
               </h2>
-              <p className="text-sm sm:text-base text-[#e76f51] font-heading font-bold mt-1">
+              <p className="text-sm sm:text-base text-[#e76f51] font-heading font-bold mt-0.5">
                 {project.subtitle}
               </p>
             </div>
@@ -80,10 +80,23 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 soundManager.playCloseModal();
                 onClose();
               }}
-              className="p-2.5 rounded-2xl bg-[#f4ebe1] hover:bg-[#e6d8cb] border border-[#e6d8cb] text-[#38271e] transition-colors cursor-pointer"
+              className="p-2.5 rounded-2xl bg-[#f4ebe1] hover:bg-[#e6d8cb] border border-[#e6d8cb] text-[#38271e] transition-colors cursor-pointer shrink-0 ml-3"
             >
               <X className="w-5 h-5" />
             </button>
+          </div>
+
+          {/* High-Resolution Screenshot Visual Preview */}
+          <div className="relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border-2 border-[#e6d8cb] shadow-md bg-[#f4ebe1]">
+            <img
+              src={project.imageUrl}
+              alt={project.title}
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+            <div className="absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-black/60 backdrop-blur-md text-xs font-mono text-white">
+              Official Gameplay Capture
+            </div>
           </div>
 
           {/* Key Game Metrics Row */}
@@ -91,7 +104,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             {project.metrics.map((m) => (
               <div
                 key={m.label}
-                className="p-4 rounded-2xl bg-[#fbf4eb] border-2 border-[#e6d8cb] flex items-center justify-between shadow-sm"
+                className="p-3.5 rounded-2xl bg-[#fbf4eb] border-2 border-[#e6d8cb] flex items-center justify-between shadow-sm"
               >
                 <span className="text-xs font-mono text-[#786558] font-bold">{m.label}</span>
                 <span className="text-sm font-heading font-extrabold text-[#e76f51]">
@@ -156,10 +169,11 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => soundManager.playClick()}
-              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#4a332d] hover:bg-[#38271e] text-white font-heading font-extrabold text-xs tracking-wider uppercase shadow-md transition-all"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#4a332d] hover:bg-[#38271e] text-white font-heading font-extrabold text-xs tracking-wider uppercase shadow-md transition-all cursor-pointer"
             >
               <Play className="w-4 h-4 fill-current text-[#ffd166]" />
-              <span>Launch Playable Demo</span>
+              <span>VISIT APP STORE / GOOGLE PLAY</span>
+              <ExternalLink className="w-3.5 h-3.5 text-white/80" />
             </a>
 
             <a
@@ -167,10 +181,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => soundManager.playClick()}
-              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-sm"
+              className="flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-sm cursor-pointer"
             >
               <Code2 className="w-4 h-4 text-[#8da178]" />
-              <span>Inspect Source / Shaders</span>
+              <span>GITHUB REPO / SHADERS</span>
             </a>
           </div>
         </motion.div>

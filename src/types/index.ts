@@ -19,6 +19,7 @@ export interface ProjectItem {
   githubUrl: string;
   color: string;
   glowColor?: string;
+  imageUrl: string;
   modelType: 'star' | 'potion' | 'gem' | 'cartridge';
 }
 
