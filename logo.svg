@@ -1,19 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
-  <defs>
-    <linearGradient id="cyber-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#06b6d4" />
-      <stop offset="50%" stop-color="#8b5cf6" />
-      <stop offset="100%" stop-color="#ec4899" />
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-    </filter>
-  </defs>
-  <rect width="100" height="100" rx="20" fill="#030712" />
-  <path d="M50 15 L85 35 L85 65 L50 85 L15 65 L15 35 Z" stroke="url(#cyber-grad)" stroke-width="4" fill="none" filter="url(#glow)"/>
-  <path d="M50 15 L50 85" stroke="#06b6d4" stroke-width="2" stroke-opacity="0.4" />
-  <path d="M15 35 L85 65" stroke="#8b5cf6" stroke-width="2" stroke-opacity="0.4" />
-  <path d="M15 65 L85 35" stroke="#ec4899" stroke-width="2" stroke-opacity="0.4" />
-  <circle cx="50" cy="50" r="10" fill="url(#cyber-grad)" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <!-- Rounded Cozy Background Shield -->
+  <rect width="128" height="128" rx="36" fill="#fbf4eb"/>
+  <rect x="4" y="4" width="120" height="120" rx="32" stroke="#8da178" stroke-width="4" stroke-opacity="0.6"/>
+
+  <!-- Sproutling Body / Face (Cream) -->
+  <ellipse cx="64" cy="74" rx="36" ry="32" fill="#fffdfa" stroke="#38271e" stroke-width="4.5"/>
+
+  <!-- Sproutling Mushroom / Acorn Cap (Warm Coral Peach) -->
+  <path d="M26 62 C26 32, 102 32, 102 62 Z" fill="#ff9e80" stroke="#38271e" stroke-width="4.5"/>
+
+  <!-- Cap White Polka Dots -->
+  <circle cx="48" cy="46" r="6" fill="#fffdfa"/>
+  <circle cx="76" cy="44" r="7" fill="#fffdfa"/>
+  <circle cx="62" cy="56" r="4.5" fill="#fffdfa"/>
+
+  <!-- Green Sprout Leaf On Top -->
+  <path d="M64 34 C64 16, 80 14, 84 18 C88 22, 82 34, 64 34 Z" fill="#8da178" stroke="#38271e" stroke-width="4"/>
+  <path d="M64 34 C60 22, 48 20, 46 25 C44 30, 52 34, 64 34 Z" fill="#9db288" stroke="#38271e" stroke-width="3.5"/>
+
+  <!-- Kawaii Eyes -->
+  <ellipse cx="50" cy="74" rx="4.5" ry="6.5" fill="#38271e"/>
+  <ellipse cx="78" cy="74" rx="4.5" ry="6.5" fill="#38271e"/>
+
+  <!-- Eye Sparkles (White Highlights) -->
+  <circle cx="51.5" cy="71.5" r="2" fill="#ffffff"/>
+  <circle cx="79.5" cy="71.5" r="2" fill="#ffffff"/>
+
+  <!-- Rosy Pink Cheeks -->
+  <ellipse cx="40" cy="80" rx="5" ry="3" fill="#ffb4a2"/>
+  <ellipse cx="88" cy="80" rx="5" ry="3" fill="#ffb4a2"/>
+
+  <!-- Cute Little Smile -->
+  <path d="M60 81 Q64 86 68 81" stroke="#38271e" stroke-width="3.5" stroke-linecap="round" fill="none"/>
 </svg>
