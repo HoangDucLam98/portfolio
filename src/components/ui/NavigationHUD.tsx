@@ -72,7 +72,7 @@ export function NavigationHUD({
               <span className="w-2 h-2 rounded-full bg-[#8da178] animate-pulse" />
             </div>
             <div className="text-[10px] font-mono text-[#8da178] font-bold tracking-tight">
-              ALEX VANCE // GAME DEV
+              HOANG DUC LAM // GAME DEV
             </div>
           </div>
         </div>

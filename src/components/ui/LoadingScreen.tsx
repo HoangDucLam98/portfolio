@@ -81,7 +81,7 @@ export function LoadingScreen({ onLoaded }: LoadingScreenProps) {
           </div>
 
           <h2 className="text-3xl font-extrabold font-heading text-[#38271e] tracking-tight mb-1">
-            ALEX VANCE
+            HOANG DUC LAM
           </h2>
           <p className="text-xs text-[#786558] font-mono mb-6">
             GAMEPLAY PROGRAMMER & 3D ARTIST

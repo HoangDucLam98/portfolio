@@ -29,7 +29,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
 
     const newHistory: TerminalHistoryItem[] = [
       ...history,
-      { type: 'input', text: `alex@game-studio:~$ ${cmd}` },
+      { type: 'input', text: `lam@game-studio:~$ ${cmd}` },
     ];
 
     switch (trimmed) {
@@ -42,7 +42,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
       case 'lore':
         newHistory.push({
           type: 'output',
-          text: `[ALEX VANCE]: ${personalInfo.bio}`,
+          text: `[HOANG DUC LAM]: ${personalInfo.bio}`,
         });
         break;
       case 'tech':
@@ -120,7 +120,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
               <div className="w-3.5 h-3.5 rounded-full bg-[#ffd166]" />
               <div className="w-3.5 h-3.5 rounded-full bg-[#8da178]" />
               <span className="text-xs font-heading font-bold text-[#38271e] ml-2">
-                sproutling-engine://alex-vance
+                sproutling-engine://hoang-duc-lam
               </span>
             </div>
             <div className="text-[11px] font-heading font-bold text-[#e76f51] flex items-center gap-1">

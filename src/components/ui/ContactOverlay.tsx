@@ -92,7 +92,7 @@ export function ContactOverlay({
                   Carrier Pigeon Dispatched!
                 </h3>
                 <p className="text-sm sm:text-base text-[#5c4a3f] max-w-md font-medium leading-relaxed">
-                  Your quest proposal has been sealed and delivered to Alex Vance. Expect a friendly reply within 24 hours.
+                  Your quest proposal has been sealed and delivered to Hoang Duc Lam. Expect a friendly reply within 24 hours.
                 </p>
                 <button
                   onClick={() => {
@@ -275,7 +275,7 @@ export function ContactOverlay({
       {/* Footer */}
       <footer className="w-full pt-8 border-t-2 border-[#e6d8cb] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-[#786558] pointer-events-auto">
         <div>
-          © {new Date().getFullYear()} Sproutling Games // Alex Vance. Crafted with React 19, Three.js & Wholesome Vibes.
+          © {new Date().getFullYear()} Sproutling Games // Hoang Duc Lam. Crafted with React 19, Three.js & Wholesome Vibes.
         </div>
 
         <button
