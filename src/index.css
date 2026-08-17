@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --font-heading: 'Fredoka', 'Plus Jakarta Sans', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --color-bg-cream: #fbf4eb;
+    --color-text-brown: #38271e;
+    --color-text-muted: #786558;
+    --color-sage: #8da178;
+    --color-peach: #ffb4a2;
+    --color-coral: #ff9e80;
+    --color-blue: #70b0d0;
+    --color-yellow: #ffd166;
+    --color-wood: #c68b59;
+    --color-card-bg: rgba(255, 255, 255, 0.88);
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: var(--color-bg-cream);
+    color: var(--color-text-brown);
+    overflow-x: hidden;
+    user-select: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom Cute Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #fbf4eb;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #c68b59;
+    border-radius: 9999px;
+    border: 2px solid #fbf4eb;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #a46f43;
+  }
+}
+
+/* Bright Cartoon Cards & Claymorphism */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(228, 206, 188, 0.8);
+  box-shadow: 0 16px 36px -8px rgba(130, 80, 40, 0.08), inset 0 2px 0 0 rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+}
+
+.glass-panel-glow {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 2px solid #8da178;
+  box-shadow: 0 20px 40px -10px rgba(141, 161, 120, 0.25), 0 8px 16px -4px rgba(130, 80, 40, 0.06), inset 0 2px 0 0 rgba(255, 255, 255, 1);
+  border-radius: 32px;
+}
+
+.glass-card-interactive {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 28px;
+}
+.glass-card-interactive:hover {
+  transform: translateY(-4px);
+  border-color: #ff9e80;
+  box-shadow: 0 20px 36px -6px rgba(255, 158, 128, 0.25), inset 0 2px 0 0 rgba(255, 255, 255, 1);
+}
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-mono-code {
+  font-family: var(--font-mono);
+}
+
+/* Subtle Cartoon Grid Background */
+.bg-grid-cozy {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(141, 161, 120, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(141, 161, 120, 0.08) 1px, transparent 1px);
+}
+
+/* Soft Animations */
+@keyframes bobFloating {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+}
+
+.animate-cozy-bob {
+  animation: bobFloating 4s ease-in-out infinite;
+}
