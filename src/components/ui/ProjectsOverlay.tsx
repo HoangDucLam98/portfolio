@@ -45,7 +45,7 @@ export function ProjectsOverlay({
           </span>
         </h2>
         <p className="text-sm text-[#5c4a3f] mt-1 font-medium">
-          Explore shipped titles, interactive physics mechanics, and custom shader pipelines.
+          Official in-game captures and technical architecture from real shipped mobile titles.
         </p>
       </div>
 
@@ -95,23 +95,30 @@ export function ProjectsOverlay({
               {/* Quick Play/Inspect Hover Badge */}
               <div className="absolute bottom-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/95 backdrop-blur-md text-xs font-heading font-bold text-[#38271e] shadow-md group-hover:bg-[#ffd166] transition-colors">
                 <Eye className="w-3.5 h-3.5 text-[#e76f51]" />
-                <span>Click to Expand Specs</span>
+                <span>View Full Gallery & Specs</span>
               </div>
             </div>
 
-            {/* Title & Subtitle */}
-            <div>
-              <div className="flex items-center justify-between">
-                <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#38271e]">
+            {/* Title & Official App Icon Row */}
+            <div className="flex items-start gap-3.5">
+              {currentProject.iconUrl && (
+                <img
+                  src={currentProject.iconUrl}
+                  alt={`${currentProject.title} Icon`}
+                  className="w-14 h-14 rounded-2xl shadow-md border-2 border-[#e6d8cb] shrink-0 object-cover bg-white"
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#38271e] truncate">
                   {currentProject.title}
                 </h3>
+                <p className="text-xs sm:text-sm text-[#e76f51] font-heading font-bold mb-1">
+                  {currentProject.subtitle}
+                </p>
+                <p className="text-xs sm:text-sm text-[#5c4a3f] leading-relaxed font-medium line-clamp-2">
+                  {currentProject.description}
+                </p>
               </div>
-              <p className="text-xs sm:text-sm text-[#e76f51] font-heading font-bold mb-1.5">
-                {currentProject.subtitle}
-              </p>
-              <p className="text-xs sm:text-sm text-[#5c4a3f] leading-relaxed font-medium">
-                {currentProject.description}
-              </p>
             </div>
 
             {/* Tech Stack Pills */}
@@ -137,7 +144,7 @@ export function ProjectsOverlay({
                 className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-[#4a332d] hover:bg-[#38271e] text-white font-heading font-extrabold text-xs tracking-wider uppercase shadow-md transition-all cursor-pointer"
               >
                 <Eye className="w-4 h-4 text-[#ffd166]" />
-                <span>VIEW SPECS & METRICS</span>
+                <span>VIEW SPECS & GALLERY</span>
               </button>
 
               <a
@@ -148,7 +155,7 @@ export function ProjectsOverlay({
                 className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-sm"
               >
                 <Play className="w-4 h-4 fill-current text-[#8da178]" />
-                <span>STORE PAGE</span>
+                <span>OFFICIAL STORE PAGE</span>
                 <ExternalLink className="w-3 h-3 text-[#786558]" />
               </a>
             </div>
@@ -199,19 +206,26 @@ export function ProjectsOverlay({
                   className={`group relative rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-300 shadow-sm ${
                     isSelected
                       ? 'border-[#e76f51] ring-4 ring-[#e76f51]/20 scale-[1.02] shadow-lg'
-                      : 'border-[#e6d8cb] hover:border-[#8da178] opacity-80 hover:opacity-100'
+                      : 'border-[#e6d8cb] hover:border-[#8da178] opacity-85 hover:opacity-100'
                   }`}
                 >
-                  <div className="w-full h-24 sm:h-28 overflow-hidden bg-[#f4ebe1]">
+                  <div className="w-full h-24 sm:h-28 overflow-hidden bg-[#f4ebe1] relative">
                     <img
                       src={project.imageUrl}
                       alt={project.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
+                    {project.iconUrl && (
+                      <img
+                        src={project.iconUrl}
+                        alt="icon"
+                        className="absolute bottom-1.5 left-1.5 w-7 h-7 rounded-lg border-2 border-white shadow-md object-cover bg-white"
+                      />
+                    )}
                   </div>
 
                   {/* Thumbnail Info Strip */}
-                  <div className="p-2 bg-white flex flex-col justify-center">
+                  <div className="p-2.5 bg-white flex flex-col justify-center">
                     <div className="text-xs font-heading font-extrabold text-[#38271e] truncate">
                       {project.title}
                     </div>

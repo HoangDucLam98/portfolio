@@ -69,6 +69,12 @@ export const projectsData: ProjectItem[] = [
     color: "#8da178",
     glowColor: "rgba(141, 161, 120, 0.4)",
     imageUrl: `${baseUrl}games/color-flow.jpg`,
+    iconUrl: `${baseUrl}games/color-flow-icon.png`,
+    galleryUrls: [
+      `${baseUrl}games/color-flow.jpg`,
+      `${baseUrl}games/color-flow-2.jpg`,
+      `${baseUrl}games/color-flow-3.jpg`
+    ],
     modelType: "potion"
   },
   {
@@ -95,6 +101,12 @@ export const projectsData: ProjectItem[] = [
     color: "#ff8a80",
     glowColor: "rgba(255, 138, 128, 0.4)",
     imageUrl: `${baseUrl}games/survival-hero.jpg`,
+    iconUrl: `${baseUrl}games/survival-hero-icon.png`,
+    galleryUrls: [
+      `${baseUrl}games/survival-hero.jpg`,
+      `${baseUrl}games/survival-hero-2.jpg`,
+      `${baseUrl}games/survival-hero-3.jpg`
+    ],
     modelType: "star"
   },
   {
@@ -121,6 +133,12 @@ export const projectsData: ProjectItem[] = [
     color: "#ffd166",
     glowColor: "rgba(255, 209, 102, 0.4)",
     imageUrl: `${baseUrl}games/supermarket-journey.jpg`,
+    iconUrl: `${baseUrl}games/supermarket-journey-icon.png`,
+    galleryUrls: [
+      `${baseUrl}games/supermarket-journey.jpg`,
+      `${baseUrl}games/supermarket-journey-2.jpg`,
+      `${baseUrl}games/supermarket-journey-3.jpg`
+    ],
     modelType: "cartridge"
   },
   {
@@ -147,6 +165,12 @@ export const projectsData: ProjectItem[] = [
     color: "#70b0d0",
     glowColor: "rgba(112, 176, 208, 0.4)",
     imageUrl: `${baseUrl}games/prison-escape.jpg`,
+    iconUrl: `${baseUrl}games/prison-escape-icon.png`,
+    galleryUrls: [
+      `${baseUrl}games/prison-escape.jpg`,
+      `${baseUrl}games/prison-escape-2.jpg`,
+      `${baseUrl}games/prison-escape-3.jpg`
+    ],
     modelType: "gem"
   }
 ];

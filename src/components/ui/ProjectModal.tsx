@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, CheckCircle2, Layers, Gamepad2, Sparkles, Code2, Play, ExternalLink } from 'lucide-react';
+import { X, CheckCircle2, Layers, Gamepad2, Sparkles, Code2, Play, ExternalLink, Image as ImageIcon } from 'lucide-react';
 import type { ProjectItem } from '../../types';
 import { soundManager } from '../../audio/audioEngine';
 
@@ -10,6 +10,12 @@ interface ProjectModalProps {
 }
 
 export function ProjectModal({ project, onClose }: ProjectModalProps) {
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  useEffect(() => {
+    setActiveImgIndex(0);
+  }, [project]);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
@@ -25,6 +31,12 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
   if (!project) return null;
 
+  const gallery = project.galleryUrls && project.galleryUrls.length > 0
+    ? project.galleryUrls
+    : [project.imageUrl];
+
+  const currentDisplayImage = gallery[activeImgIndex] || project.imageUrl;
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
@@ -37,7 +49,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             soundManager.playCloseModal();
             onClose();
           }}
-          className="fixed inset-0 bg-black/40 backdrop-blur-md"
+          className="fixed inset-0 bg-black/45 backdrop-blur-md"
         />
 
         {/* Modal Window Container */}
@@ -50,28 +62,37 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         >
           {/* Header */}
           <div className="flex items-start justify-between border-b-2 border-[#e6d8cb] pb-4">
-            <div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <span
-                  className="px-3 py-0.5 rounded-full text-xs font-heading font-bold tracking-wider uppercase"
-                  style={{
-                    backgroundColor: `${project.color}25`,
-                    color: project.color,
-                    border: `2px solid ${project.color}60`,
-                  }}
-                >
-                  ★ {project.category} ★
-                </span>
-                <span className="text-xs font-mono text-[#786558] font-bold">
-                  // GAME QUEST LOG
-                </span>
+            <div className="flex items-start gap-4">
+              {project.iconUrl && (
+                <img
+                  src={project.iconUrl}
+                  alt={`${project.title} Icon`}
+                  className="w-16 h-16 rounded-2xl shadow-md border-2 border-[#e6d8cb] shrink-0 object-cover bg-white"
+                />
+              )}
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span
+                    className="px-3 py-0.5 rounded-full text-xs font-heading font-bold tracking-wider uppercase"
+                    style={{
+                      backgroundColor: `${project.color}25`,
+                      color: project.color,
+                      border: `2px solid ${project.color}60`,
+                    }}
+                  >
+                    ★ {project.category} ★
+                  </span>
+                  <span className="text-xs font-mono text-[#786558] font-bold">
+                    // OFFICIAL STORE SHIPPED TITLE
+                  </span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#38271e] tracking-tight">
+                  {project.title}
+                </h2>
+                <p className="text-sm sm:text-base text-[#e76f51] font-heading font-bold mt-0.5">
+                  {project.subtitle}
+                </p>
               </div>
-              <h2 className="text-2xl sm:text-4xl font-extrabold font-heading text-[#38271e] tracking-tight">
-                {project.title}
-              </h2>
-              <p className="text-sm sm:text-base text-[#e76f51] font-heading font-bold mt-0.5">
-                {project.subtitle}
-              </p>
             </div>
 
             {/* Close Button */}
@@ -86,17 +107,46 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             </button>
           </div>
 
-          {/* High-Resolution Screenshot Visual Preview */}
-          <div className="relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden border-2 border-[#e6d8cb] shadow-md bg-[#f4ebe1]">
-            <img
-              src={project.imageUrl}
-              alt={project.title}
-              className="w-full h-full object-cover object-center"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            <div className="absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-black/60 backdrop-blur-md text-xs font-mono text-white">
-              Official Gameplay Capture
+          {/* High-Resolution Screenshot Interactive Gallery */}
+          <div className="flex flex-col gap-3">
+            <div className="relative w-full h-56 sm:h-96 rounded-2xl overflow-hidden border-2 border-[#e6d8cb] shadow-md bg-[#f4ebe1]">
+              <img
+                src={currentDisplayImage}
+                alt={`${project.title} Gameplay Screenshot ${activeImgIndex + 1}`}
+                className="w-full h-full object-cover object-center transition-all duration-300"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-3 left-3 px-3 py-1 rounded-xl bg-black/70 backdrop-blur-md text-xs font-mono text-white flex items-center gap-1.5">
+                <ImageIcon className="w-3.5 h-3.5 text-[#ffd166]" />
+                Official Store Gameplay Capture {activeImgIndex + 1} / {gallery.length}
+              </div>
             </div>
+
+            {/* Interactive Thumbnail Gallery Strip */}
+            {gallery.length > 1 && (
+              <div className="flex items-center gap-3 overflow-x-auto pb-1">
+                {gallery.map((imgUrl, idx) => (
+                  <button
+                    key={`thumb-${idx}`}
+                    onClick={() => {
+                      soundManager.playClick();
+                      setActiveImgIndex(idx);
+                    }}
+                    className={`relative w-24 h-16 sm:w-28 sm:h-18 rounded-xl overflow-hidden border-2 shrink-0 cursor-pointer transition-all ${
+                      activeImgIndex === idx
+                        ? 'border-[#e76f51] ring-2 ring-[#e76f51]/40 scale-105 shadow-md'
+                        : 'border-[#e6d8cb] opacity-70 hover:opacity-100'
+                    }`}
+                  >
+                    <img
+                      src={imgUrl}
+                      alt={`Thumbnail ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Key Game Metrics Row */}

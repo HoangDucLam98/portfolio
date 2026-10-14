@@ -20,6 +20,8 @@ export interface ProjectItem {
   color: string;
   glowColor?: string;
   imageUrl: string;
+  iconUrl?: string;
+  galleryUrls?: string[];
   modelType: 'star' | 'potion' | 'gem' | 'cartridge';
 }
 
