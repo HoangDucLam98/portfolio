@@ -68,10 +68,10 @@ export const projectsData: ProjectItem[] = [
     githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#8da178",
     glowColor: "rgba(141, 161, 120, 0.4)",
-    imageUrl: `${baseUrl}games/color-flow.jpg`,
+    imageUrl: `${baseUrl}games/color-flow-sand-art.jpg`,
     iconUrl: `${baseUrl}games/color-flow-icon.png`,
     galleryUrls: [
-      `${baseUrl}games/color-flow.jpg`,
+      `${baseUrl}games/color-flow-sand-art.jpg`,
       `${baseUrl}games/color-flow-2.jpg`,
       `${baseUrl}games/color-flow-3.jpg`
     ],
