@@ -1,5 +1,7 @@
 import { Suspense } from 'react';
+import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
+import { Environment } from '@react-three/drei';
 import { CyberGrid } from './CyberGrid';
 import { FloatingParticles } from './FloatingParticles';
 import { WorkspaceModel } from './WorkspaceModel';
@@ -51,49 +53,61 @@ export function SceneContainer({
   isContactSuccess,
   isContactFocused,
 }: SceneContainerProps) {
-  // Lighting & Color settings based on Time of Day
+  // Vibrant, high-contrast Lighting & Color settings based on Time of Day
   const envConfig = {
     day: {
-      bg: '#fbf3ea',
-      fogNear: 12,
-      fogFar: 34,
-      ambientColor: '#fff8ee',
-      ambientIntensity: 1.8,
-      sunColor: '#fff2d6',
-      sunIntensity: 2.2,
-      sunPos: [6, 14, 6] as [number, number, number],
-      fillColor: '#70b0d0',
-      fillIntensity: 0.8,
-      particles1: '#ffd166',
-      particles2: '#ff9e80',
+      bg: '#fff8f0',
+      fogNear: 16,
+      fogFar: 42,
+      ambientColor: '#fff5ea',
+      ambientIntensity: 0.85,
+      sunColor: '#fff9e6',
+      sunIntensity: 3.2,
+      sunPos: [7, 14, 7] as [number, number, number],
+      rimColor: '#fed7aa',
+      rimIntensity: 2.2,
+      rimPos: [-5, 8, -6] as [number, number, number],
+      fillColor: '#93c5fd',
+      fillIntensity: 0.85,
+      particles1: '#f59e0b',
+      particles2: '#f43f5e',
+      envPreset: 'sunset' as const,
     },
     sunset: {
-      bg: '#fad2b0',
-      fogNear: 10,
-      fogFar: 30,
-      ambientColor: '#ffe5b4',
-      ambientIntensity: 1.5,
-      sunColor: '#ff9a60',
-      sunIntensity: 2.6,
-      sunPos: [10, 8, 4] as [number, number, number],
-      fillColor: '#9b5de5',
+      bg: '#fed7aa',
+      fogNear: 14,
+      fogFar: 36,
+      ambientColor: '#ffedd5',
+      ambientIntensity: 0.8,
+      sunColor: '#f97316',
+      sunIntensity: 3.5,
+      sunPos: [9, 7, 4] as [number, number, number],
+      rimColor: '#c084fc',
+      rimIntensity: 2.5,
+      rimPos: [-6, 7, -5] as [number, number, number],
+      fillColor: '#a855f7',
       fillIntensity: 1.1,
-      particles1: '#ff9e80',
-      particles2: '#ffd166',
+      particles1: '#ea580c',
+      particles2: '#eab308',
+      envPreset: 'sunset' as const,
     },
     night: {
-      bg: '#131722',
-      fogNear: 8,
-      fogFar: 28,
-      ambientColor: '#1e2436',
-      ambientIntensity: 0.9,
-      sunColor: '#70b0d0',
-      sunIntensity: 0.8,
+      bg: '#0f172a',
+      fogNear: 10,
+      fogFar: 32,
+      ambientColor: '#1e293b',
+      ambientIntensity: 0.65,
+      sunColor: '#38bdf8',
+      sunIntensity: 1.2,
       sunPos: [4, 10, 4] as [number, number, number],
-      fillColor: '#ffd166',
-      fillIntensity: 0.6,
-      particles1: '#70b0d0',
-      particles2: '#ffd166',
+      rimColor: '#818cf8',
+      rimIntensity: 1.8,
+      rimPos: [-4, 7, -5] as [number, number, number],
+      fillColor: '#fbbf24',
+      fillIntensity: 0.8,
+      particles1: '#38bdf8',
+      particles2: '#f59e0b',
+      envPreset: 'city' as const,
     },
   }[timeOfDay];
 
@@ -107,6 +121,8 @@ export function SceneContainer({
           antialias: true,
           alpha: true,
           powerPreference: 'high-performance',
+          toneMapping: THREE.ACESFilmicToneMapping,
+          toneMappingExposure: 1.25,
         }}
       >
         <Suspense fallback={null}>
@@ -114,34 +130,45 @@ export function SceneContainer({
           <color attach="background" args={[envConfig.bg]} />
           <fog attach="fog" args={[envConfig.bg, envConfig.fogNear, envConfig.fogFar]} />
 
-          {/* Ambient Lighting */}
+          {/* Studio HDR Environment for Specular Gloss & Reflections */}
+          <Environment preset={envConfig.envPreset} environmentIntensity={0.65} />
+
+          {/* Balanced Ambient Lighting - Eliminates Washed Out Look */}
           <ambientLight color={envConfig.ambientColor} intensity={envConfig.ambientIntensity} />
           
-          {/* Key Directional Sun / Moon Light */}
+          {/* Key Directional Sun / Moon Light with Crisp Shadows */}
           <directionalLight
             position={envConfig.sunPos}
             intensity={envConfig.sunIntensity}
             color={envConfig.sunColor}
             castShadow
-            shadow-mapSize={[1024, 1024]}
+            shadow-mapSize={[2048, 2048]}
+            shadow-bias={-0.0001}
             shadow-camera-near={0.5}
-            shadow-camera-far={25}
-            shadow-camera-left={-6}
-            shadow-camera-right={6}
-            shadow-camera-top={6}
-            shadow-camera-bottom={-6}
+            shadow-camera-far={28}
+            shadow-camera-left={-7}
+            shadow-camera-right={7}
+            shadow-camera-top={7}
+            shadow-camera-bottom={-7}
+          />
+
+          {/* Back Rim Light - Accentuates Object Silhouettes */}
+          <directionalLight
+            position={envConfig.rimPos}
+            intensity={envConfig.rimIntensity}
+            color={envConfig.rimColor}
           />
 
           {/* Secondary Fill Light */}
           <directionalLight
-            position={[-6, 6, -4]}
+            position={[-6, 5, 4]}
             intensity={envConfig.fillIntensity}
             color={envConfig.fillColor}
           />
 
           {/* Cozy Night Desk Lamp Point Light */}
           {timeOfDay === 'night' && (
-            <pointLight position={[0, 1.8, 0.4]} color="#ffd166" intensity={2.8} distance={5} />
+            <pointLight position={[0, 1.8, 0.4]} color="#ffd166" intensity={3.2} distance={6} />
           )}
 
           {/* Warm Floor Bounce */}
