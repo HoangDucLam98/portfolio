@@ -58,7 +58,7 @@ export function LoadingScreen({ onLoaded }: LoadingScreenProps) {
         initial={{ opacity: 1 }}
         exit={{ opacity: 0, scale: 1.04 }}
         transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#fbf4eb] bg-grid-cozy text-[#38271e] overflow-hidden px-4"
+        className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#dbeafe] bg-grid-cozy text-[#1e293b] overflow-hidden px-4"
       >
         {/* Background Warm Sunburst Glow */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] bg-[#ffd166]/25 rounded-full blur-[130px] pointer-events-none" />

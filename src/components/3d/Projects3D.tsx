@@ -435,10 +435,15 @@ export function Projects3D({ activeIndex, onSelectProject, onHoverIndex }: Proje
 
   return (
     <group position={[0, 0.4, 0]}>
-      {/* Ground Pastel Ring */}
+      {/* Golden Sky Sanctuary Ring & Cloud Base */}
       <mesh ref={baseRingRef} position={[0, -1.35, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[3.2, 3.28, 64]} />
-        <meshBasicMaterial color="#8da178" transparent opacity={0.35} />
+        <ringGeometry args={[3.2, 3.32, 64]} />
+        <meshBasicMaterial color="#facc15" transparent opacity={0.45} />
+      </mesh>
+      {/* Cloud Platform Disc */}
+      <mesh position={[0, -1.45, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[4.2, 32]} />
+        <meshStandardMaterial color="#ffffff" transparent opacity={0.35} roughness={0.9} />
       </mesh>
 
       {/* 3D Game Project Cards */}

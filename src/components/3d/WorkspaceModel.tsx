@@ -37,7 +37,7 @@ function createGameEngineTexture(): THREE.CanvasTexture {
     ctx.fillStyle = '#1e293b';
     ctx.fillRect(0, 0, 1024, 48);
 
-    // Window controls (macOS style pastel dots)
+    // Window controls
     ctx.fillStyle = '#f43f5e';
     ctx.beginPath(); ctx.arc(24, 24, 6, 0, Math.PI * 2); ctx.fill();
     ctx.fillStyle = '#fbbf24';
@@ -47,7 +47,7 @@ function createGameEngineTexture(): THREE.CanvasTexture {
 
     ctx.fillStyle = '#f8fafc';
     ctx.font = 'bold 15px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('🎮 SPROUTLING ENGINE // HOANG DUC LAM - 3D GAME STUDIO', 95, 29);
+    ctx.fillText('🎮 SPROUTLING SKY ENGINE // HOANG DUC LAM - 3D STUDIO', 95, 29);
 
     ctx.fillStyle = '#4ade80';
     ctx.font = 'bold 13px "JetBrains Mono", monospace';
@@ -68,14 +68,14 @@ function createGameEngineTexture(): THREE.CanvasTexture {
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('⚡ Character State Machine', 58, 104);
+    ctx.fillText('⚡ Sky Adventurer Controller', 58, 104);
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '12px "JetBrains Mono", monospace';
-    ctx.fillText('▸ State: Running / Airborne', 58, 142);
+    ctx.fillText('▸ State: Airborne / Gliding', 58, 142);
     ctx.fillText('▸ MoveSpeed: 8.5 m/s', 58, 168);
     ctx.fillText('▸ JumpForce: 12.0 N', 58, 194);
-    ctx.fillText('▸ Out: RigidbodyVelocity', 58, 220);
+    ctx.fillText('▸ WindDrift: Active [URP]', 58, 220);
 
     // Node 2: Cel-Shading & Shaders
     ctx.fillStyle = '#1e293b';
@@ -92,15 +92,15 @@ function createGameEngineTexture(): THREE.CanvasTexture {
     ctx.fill();
     ctx.fillStyle = '#ffffff';
     ctx.font = 'bold 14px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('🍄 Stylized Cel Shader Pass', 378, 129);
+    ctx.fillText('🍄 Fantasy Cel Shader & Sunburst', 378, 129);
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '12px "JetBrains Mono", monospace';
-    ctx.fillText('▸ LightBands: 3 Steps Toon', 378, 166);
-    ctx.fillText('▸ RimHighlight: #fed7aa', 378, 192);
-    ctx.fillText('▸ ClearcoatRough: 0.12', 378, 218);
+    ctx.fillText('▸ WindDisplacement: Grass Vertex', 378, 166);
+    ctx.fillText('▸ SunRays: Volumetric Golden', 378, 192);
+    ctx.fillText('▸ RimHighlight: #fde047', 378, 218);
     ctx.fillText('▸ Status: COMPILED [OK]', 378, 244);
-    ctx.fillText('▸ Out: PhysicalShading', 378, 270);
+    ctx.fillText('▸ Out: TearsOfTheKingdomStyle', 378, 270);
 
     // Node 3: Audio & SFX
     ctx.fillStyle = '#1e293b';
@@ -121,10 +121,10 @@ function createGameEngineTexture(): THREE.CanvasTexture {
 
     ctx.fillStyle = '#e2e8f0';
     ctx.font = '12px "JetBrains Mono", monospace';
-    ctx.fillText('▸ Event: /SFX/GoldenStar', 728, 192);
+    ctx.fillText('▸ Event: /SFX/SkyWindBreeze', 728, 192);
     ctx.fillText('▸ MasterVolume: 100%', 728, 218);
-    ctx.fillText('▸ Polyphony: 32 Channels', 728, 244);
-    ctx.fillText('▸ DSP Status: ACTIVE', 728, 270);
+    ctx.fillText('▸ AmbientDSP: ChirpingBirds', 728, 244);
+    ctx.fillText('▸ Status: 3D SPATIAL OK', 728, 270);
 
     // Connecting neon splines
     ctx.strokeStyle = '#f43f5e';
@@ -146,11 +146,11 @@ function createGameEngineTexture(): THREE.CanvasTexture {
     ctx.fillRect(0, 465, 1024, 111);
     ctx.fillStyle = '#4ade80';
     ctx.font = 'bold 12.5px "JetBrains Mono", monospace';
-    ctx.fillText('✔ [SproutlingStudio] Loaded 4 Published Mobile Games [100%]', 24, 498);
+    ctx.fillText('✔ [SproutlingSky] Generated Zelda/Genshin Floating Sky Archipelago [100%]', 24, 498);
     ctx.fillStyle = '#fbbf24';
     ctx.fillText('✔ [GamePhysics] Object Pooling: 200 Entities Active (Survival Hero Engine)', 24, 523);
     ctx.fillStyle = '#38bdf8';
-    ctx.fillText('▶ Press [G] to launch 3D Mini-Game on Desk | Nintendo Switch Ready', 24, 548);
+    ctx.fillText('▶ Press [G] to launch 3D Mini-Game on Island | Nintendo Switch Ready', 24, 548);
   }
 
   const texture = new THREE.CanvasTexture(canvas);
@@ -163,9 +163,11 @@ export function WorkspaceModel() {
   const steamRef = useRef<THREE.Group>(null);
   const fanRef1 = useRef<THREE.Mesh>(null);
   const fanRef2 = useRef<THREE.Mesh>(null);
+  const crystalOrbitRef = useRef<THREE.Group>(null);
+  const waterfallRef = useRef<THREE.Mesh>(null);
   const screenTexture = useMemo(() => createGameEngineTexture(), []);
 
-  // Animations: Rising steam & rotating PC fans
+  // Animations: Rising steam, rotating fans, floating crystals & waterfall pulse
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
     if (steamRef.current) {
@@ -178,6 +180,12 @@ export function WorkspaceModel() {
     if (fanRef2.current) {
       fanRef2.current.rotation.z = t * 8.0;
     }
+    if (crystalOrbitRef.current) {
+      crystalOrbitRef.current.rotation.y = t * 0.4;
+    }
+    if (waterfallRef.current) {
+      waterfallRef.current.position.y = -0.5 - ((t * 0.6) % 0.3);
+    }
   });
 
   const handleHover = (name: string) => {
@@ -187,6 +195,131 @@ export function WorkspaceModel() {
 
   return (
     <group position={[0, 0, 0]}>
+
+      {/* ================= 0. LUSH FLOATING SKY ISLAND (ZELDA / GENSHIN) ================= */}
+      <group position={[0, -0.05, 0]}>
+        {/* Main Lush Grass Top Plateau (Spans around the desk) */}
+        <RoundedBox args={[4.6, 0.45, 3.2]} radius={0.3} smoothness={4} castShadow receiveShadow position={[0, 0.32, 0.05]}>
+          <meshPhysicalMaterial
+            color="#22c55e"
+            roughness={0.65}
+            clearcoat={0.25}
+          />
+        </RoundedBox>
+
+        {/* Emerald Edge Turf Fringe */}
+        <RoundedBox args={[4.8, 0.2, 3.4]} radius={0.25} smoothness={3} receiveShadow position={[0, 0.22, 0.05]}>
+          <meshStandardMaterial color="#16a34a" roughness={0.75} />
+        </RoundedBox>
+
+        {/* Faceted Earth/Stone Stratum descending downwards */}
+        <mesh position={[0, -0.65, 0.05]} castShadow>
+          <cylinderGeometry args={[2.2, 1.3, 1.4, 7]} />
+          <meshStandardMaterial color="#6c482f" roughness={0.9} />
+        </mesh>
+
+        {/* Inverted Tapered Stalactite Rocky Tip */}
+        <mesh position={[0, -1.8, 0.05]} rotation={[Math.PI, 0, 0]} castShadow>
+          <coneGeometry args={[1.35, 1.5, 6]} />
+          <meshStandardMaterial color="#4a3322" roughness={0.95} />
+        </mesh>
+
+        {/* Embedded Glowing Cyan Sky Crystals in Cliff Rock */}
+        <mesh position={[-1.4, -0.7, 1.1]} rotation={[0.4, 0.3, 0.2]}>
+          <octahedronGeometry args={[0.22, 0]} />
+          <meshBasicMaterial color="#38bdf8" />
+        </mesh>
+        <mesh position={[1.5, -0.9, -0.8]} rotation={[-0.3, 0.5, -0.4]}>
+          <octahedronGeometry args={[0.26, 0]} />
+          <meshBasicMaterial color="#38bdf8" />
+        </mesh>
+        <mesh position={[0.2, -1.9, 0.6]} rotation={[0.2, 0, 0.5]}>
+          <octahedronGeometry args={[0.2, 0]} />
+          <meshBasicMaterial color="#facc15" />
+        </mesh>
+
+        {/* Miniature Cascading Sky Waterfall (Curves off edge at left-front) */}
+        <group position={[-2.1, 0.1, 0.7]} rotation={[0, 0.3, 0]}>
+          {/* Water Pool on Grass */}
+          <mesh position={[0.1, 0.32, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+            <circleGeometry args={[0.35, 16]} />
+            <meshPhysicalMaterial
+              color="#38bdf8"
+              transparent
+              opacity={0.8}
+              roughness={0.1}
+              transmission={0.8}
+            />
+          </mesh>
+          {/* Cascading Stream */}
+          <mesh ref={waterfallRef} position={[0, -0.5, 0]}>
+            <cylinderGeometry args={[0.16, 0.22, 1.4, 16]} />
+            <meshPhysicalMaterial
+              color="#67e8f9"
+              transparent
+              opacity={0.75}
+              roughness={0.1}
+              transmission={0.85}
+              clearcoat={1.0}
+            />
+          </mesh>
+          {/* Rising Mist Puffs */}
+          <mesh position={[0, -1.3, 0]}>
+            <sphereGeometry args={[0.28, 12, 12]} />
+            <meshBasicMaterial color="#ffffff" transparent opacity={0.4} />
+          </mesh>
+        </group>
+
+        {/* Stepping River Stones on Grass */}
+        {[
+          [-0.6, 0.55, 1.1],
+          [-0.2, 0.55, 1.25],
+          [0.3, 0.55, 1.15],
+          [0.7, 0.55, 1.3],
+        ].map(([x, y, z], idx) => (
+          <mesh key={`stone-${idx}`} position={[x, y, z]} rotation={[0, idx * 0.7, 0]} castShadow receiveShadow>
+            <cylinderGeometry args={[0.14, 0.16, 0.04, 8]} />
+            <meshStandardMaterial color="#94a3b8" roughness={0.6} />
+          </mesh>
+        ))}
+
+        {/* Tiny Stylized Wildflowers (Yellow, Red, Sky Blue) */}
+        {[
+          { pos: [-1.8, 0.56, 0.2] as [number, number, number], col: '#facc15' },
+          { pos: [-1.9, 0.56, -0.4] as [number, number, number], col: '#f43f5e' },
+          { pos: [1.8, 0.56, 0.8] as [number, number, number], col: '#facc15' },
+          { pos: [1.9, 0.56, -0.3] as [number, number, number], col: '#38bdf8' },
+          { pos: [-1.2, 0.56, 1.3] as [number, number, number], col: '#f472b6' },
+          { pos: [1.3, 0.56, 1.2] as [number, number, number], col: '#4ade80' },
+        ].map(({ pos, col }, idx) => (
+          <group key={`flower-${idx}`} position={pos}>
+            <mesh position={[0, 0.05, 0]}>
+              <sphereGeometry args={[0.04, 8, 8]} />
+              <meshStandardMaterial color={col} roughness={0.3} />
+            </mesh>
+            <mesh position={[0, 0.02, 0]}>
+              <cylinderGeometry args={[0.008, 0.008, 0.05, 6]} />
+              <meshStandardMaterial color="#15803d" />
+            </mesh>
+          </group>
+        ))}
+
+        {/* Orbiting Sky Shard Crystals */}
+        <group ref={crystalOrbitRef} position={[0, 0.8, 0]}>
+          <mesh position={[2.7, 0.4, 0]} rotation={[0.4, 0.4, 0]}>
+            <octahedronGeometry args={[0.18, 0]} />
+            <meshBasicMaterial color="#38bdf8" />
+          </mesh>
+          <mesh position={[-2.6, 0.2, -0.8]} rotation={[-0.3, 0.2, 0.5]}>
+            <octahedronGeometry args={[0.15, 0]} />
+            <meshBasicMaterial color="#facc15" />
+          </mesh>
+          <mesh position={[0.8, 0.6, -2.2]} rotation={[0.5, -0.2, 0.3]}>
+            <octahedronGeometry args={[0.16, 0]} />
+            <meshBasicMaterial color="#4ade80" />
+          </mesh>
+        </group>
+      </group>
 
       {/* ================= 1. CURATED STYLIZED WORKSPACE DESK ================= */}
       <group position={[0, 0, 0]}>
@@ -205,7 +338,7 @@ export function WorkspaceModel() {
           <meshStandardMaterial color="#2d3748" roughness={0.7} />
         </RoundedBox>
 
-        {/* 4 Sturdy Wooden Legs with Brass Footing (0 to 0.48) */}
+        {/* 4 Sturdy Wooden Legs with Brass Footing */}
         {[
           [-1.6, 0.24, -0.72],
           [1.6, 0.24, -0.72],
@@ -213,12 +346,10 @@ export function WorkspaceModel() {
           [1.6, 0.24, 0.72],
         ].map(([x, y, z], idx) => (
           <group key={`leg-${idx}`} position={[x, y, z]}>
-            {/* Wooden Pillar */}
             <mesh castShadow receiveShadow>
               <cylinderGeometry args={[0.055, 0.045, 0.48, 24]} />
               <meshStandardMaterial color="#c48a58" roughness={0.4} />
             </mesh>
-            {/* Brass Cap */}
             <mesh position={[0, -0.2, 0]}>
               <cylinderGeometry args={[0.05, 0.058, 0.08, 24]} />
               <meshStandardMaterial color="#eab308" metalness={0.75} roughness={0.25} />
@@ -277,12 +408,10 @@ export function WorkspaceModel() {
 
       {/* ================= 3. CUSTOM RGB GLASS GAMING PC TOWER ================= */}
       <group position={[1.32, 0.61, -0.05]} rotation={[0, -0.15, 0]}>
-        {/* Chassis Body */}
         <RoundedBox args={[0.42, 0.76, 0.62]} radius={0.025} smoothness={3} castShadow position={[0, 0.38, 0]}>
           <meshStandardMaterial color="#0f172a" roughness={0.35} metalness={0.3} />
         </RoundedBox>
 
-        {/* Tempered Glass Side Panel */}
         <mesh position={[-0.215, 0.38, 0]}>
           <planeGeometry args={[0.6, 0.7]} />
           <meshPhysicalMaterial
@@ -296,9 +425,7 @@ export function WorkspaceModel() {
           />
         </mesh>
 
-        {/* Front Mesh Intake with Dual Rotating RGB LED Fans */}
         <group position={[0, 0.42, 0.315]}>
-          {/* Fan 1 (Upper) */}
           <group position={[0, 0.16, 0]}>
             <mesh ref={fanRef1}>
               <ringGeometry args={[0.08, 0.12, 24]} />
@@ -307,7 +434,6 @@ export function WorkspaceModel() {
             <pointLight color="#38bdf8" intensity={0.8} distance={0.9} />
           </group>
 
-          {/* Fan 2 (Lower) */}
           <group position={[0, -0.16, 0]}>
             <mesh ref={fanRef2}>
               <ringGeometry args={[0.08, 0.12, 24]} />
@@ -317,23 +443,19 @@ export function WorkspaceModel() {
           </group>
         </group>
 
-        {/* Internal Glowing RGB RAM & GPU Light */}
         <pointLight position={[-0.05, 0.45, 0]} color="#a855f7" intensity={1.2} distance={0.7} />
       </group>
 
       {/* ================= 4. MECHANICAL KEYBOARD & MOUSE ================= */}
       <group position={[0, 0.615, 0.22]}>
-        {/* Keyboard Base */}
         <RoundedBox args={[0.88, 0.03, 0.3]} radius={0.015} smoothness={3} castShadow position={[-0.15, 0.015, 0]}>
           <meshPhysicalMaterial color="#334155" roughness={0.3} clearcoat={0.5} />
         </RoundedBox>
 
-        {/* Pastel Keycaps Block */}
         <mesh position={[-0.15, 0.035, 0]}>
           <boxGeometry args={[0.82, 0.015, 0.25]} />
           <meshStandardMaterial color="#f8fafc" roughness={0.3} />
         </mesh>
-        {/* Contrasting Spacebar & Esc */}
         <mesh position={[-0.15, 0.045, 0.09]}>
           <boxGeometry args={[0.28, 0.016, 0.035]} />
           <meshStandardMaterial color="#f43f5e" roughness={0.25} />
@@ -343,7 +465,6 @@ export function WorkspaceModel() {
           <meshStandardMaterial color="#38bdf8" roughness={0.25} />
         </mesh>
 
-        {/* Ergonomic Curved Mouse */}
         <group position={[0.55, 0.018, 0.02]} rotation={[0, -0.08, 0]}>
           <RoundedBox args={[0.13, 0.038, 0.22]} radius={0.025} smoothness={4} castShadow>
             <meshPhysicalMaterial
@@ -353,7 +474,6 @@ export function WorkspaceModel() {
               clearcoatRoughness={0.1}
             />
           </RoundedBox>
-          {/* Glowing Scroll Wheel */}
           <mesh position={[0, 0.022, -0.03]}>
             <cylinderGeometry args={[0.014, 0.014, 0.025, 16]} />
             <meshBasicMaterial color="#38bdf8" />
@@ -373,7 +493,6 @@ export function WorkspaceModel() {
           achievementsManager.unlock('switch_enthusiast');
         }}
       >
-        {/* Main Tablet Body */}
         <RoundedBox args={[0.38, 0.024, 0.22]} radius={0.014} smoothness={4} castShadow>
           <meshPhysicalMaterial
             color="#1e293b"
@@ -383,13 +502,11 @@ export function WorkspaceModel() {
           />
         </RoundedBox>
 
-        {/* Screen */}
         <mesh position={[0, 0.0135, 0]} rotation={[-Math.PI / 2, 0, 0]}>
           <planeGeometry args={[0.33, 0.18]} />
           <meshBasicMaterial color="#38bdf8" />
         </mesh>
 
-        {/* Left Electric Cyan Joy-Con */}
         <group position={[-0.23, 0, 0]}>
           <RoundedBox args={[0.08, 0.024, 0.22]} radius={0.018} smoothness={4} castShadow>
             <meshPhysicalMaterial
@@ -398,14 +515,12 @@ export function WorkspaceModel() {
               clearcoat={0.8}
             />
           </RoundedBox>
-          {/* Left Analog Stick */}
           <mesh position={[0, 0.02, -0.04]} castShadow>
             <sphereGeometry args={[0.018, 20, 20]} />
             <meshStandardMaterial color="#0f172a" roughness={0.4} />
           </mesh>
         </group>
 
-        {/* Right Neon Coral Joy-Con */}
         <group position={[0.23, 0, 0]}>
           <RoundedBox args={[0.08, 0.024, 0.22]} radius={0.018} smoothness={4} castShadow>
             <meshPhysicalMaterial
@@ -414,7 +529,6 @@ export function WorkspaceModel() {
               clearcoat={0.8}
             />
           </RoundedBox>
-          {/* Right Analog Stick */}
           <mesh position={[0, 0.02, 0.04]} castShadow>
             <sphereGeometry args={[0.018, 20, 20]} />
             <meshStandardMaterial color="#0f172a" roughness={0.4} />
@@ -434,13 +548,11 @@ export function WorkspaceModel() {
           achievementsManager.trackCoffeeClick();
         }}
       >
-        {/* Cork Coaster */}
         <mesh position={[0, 0.005, 0]} receiveShadow>
           <cylinderGeometry args={[0.13, 0.13, 0.01, 32]} />
           <meshStandardMaterial color="#b45309" roughness={0.8} />
         </mesh>
 
-        {/* Glossy Terracotta Ceramic Mug Body */}
         <mesh position={[0, 0.12, 0]} castShadow>
           <cylinderGeometry args={[0.09, 0.075, 0.21, 32]} />
           <meshPhysicalMaterial
@@ -451,19 +563,16 @@ export function WorkspaceModel() {
           />
         </mesh>
 
-        {/* Creamy Foam */}
         <mesh position={[0, 0.21, 0]}>
           <cylinderGeometry args={[0.082, 0.082, 0.015, 24]} />
           <meshStandardMaterial color="#fffbeb" roughness={0.5} />
         </mesh>
 
-        {/* Ceramic Handle */}
         <mesh position={[0.095, 0.12, 0]} rotation={[0, 0, Math.PI / 2]}>
           <torusGeometry args={[0.055, 0.016, 16, 24]} />
           <meshPhysicalMaterial color="#ea580c" roughness={0.18} clearcoat={0.85} />
         </mesh>
 
-        {/* Puffy Steam */}
         <group ref={steamRef} position={[0, 0.26, 0]}>
           <Float speed={2.5} rotationIntensity={0.5} floatIntensity={0.7}>
             <mesh position={[0, 0.03, 0]}>
@@ -480,7 +589,6 @@ export function WorkspaceModel() {
 
       {/* ================= 7. SUCCULENT CERAMIC PLANTER ================= */}
       <group position={[-1.38, 0.615, -0.15]} scale={0.92} onPointerOver={() => handleHover('Plant')} onPointerOut={() => setHovered(null)}>
-        {/* Faceted Ceramic Pot */}
         <mesh position={[0, 0.12, 0]} castShadow>
           <cylinderGeometry args={[0.15, 0.11, 0.22, 12]} />
           <meshPhysicalMaterial
@@ -490,13 +598,11 @@ export function WorkspaceModel() {
           />
         </mesh>
 
-        {/* Soil */}
         <mesh position={[0, 0.215, 0]}>
           <cylinderGeometry args={[0.14, 0.14, 0.02, 16]} />
           <meshStandardMaterial color="#3f2e27" roughness={0.9} />
         </mesh>
 
-        {/* Plump Jade Succulent Petals */}
         {[0, 60, 120, 180, 240, 300].map((deg) => {
           const rad = (deg * Math.PI) / 180;
           return (
@@ -511,20 +617,19 @@ export function WorkspaceModel() {
             </mesh>
           );
         })}
-        {/* Center Bud */}
         <mesh position={[0, 0.31, 0]} castShadow>
           <sphereGeometry args={[0.05, 18, 18]} />
           <meshPhysicalMaterial color="#86efac" roughness={0.2} clearcoat={0.7} />
         </mesh>
       </group>
 
-      {/* Soft Contact Shadows on Floor */}
+      {/* Soft Contact Shadows on Island Grass */}
       <ContactShadows
-        position={[0, 0.01, 0]}
-        opacity={0.45}
-        scale={4.8}
-        blur={2.0}
-        far={1.8}
+        position={[0, 0.54, 0]}
+        opacity={0.35}
+        scale={3.8}
+        blur={1.8}
+        far={1.2}
       />
     </group>
   );

@@ -364,13 +364,24 @@ function SkillNode({
         {(hovered || isSelected) && (
           <pointLight color={skill.color} intensity={1.6} distance={2.2} />
         )}
+
+        {/* Miniature Floating Sky Stone Pedestal */}
+        <mesh position={[0, -0.28, 0]} castShadow receiveShadow>
+          <cylinderGeometry args={[0.3, 0.18, 0.08, 6]} />
+          <meshStandardMaterial color="#64748b" roughness={0.85} />
+        </mesh>
+        {/* Moss / Grass Top on Pedestal */}
+        <mesh position={[0, -0.25, 0]}>
+          <cylinderGeometry args={[0.32, 0.3, 0.025, 6]} />
+          <meshStandardMaterial color="#22c55e" roughness={0.7} />
+        </mesh>
       </group>
 
       {/* 3D Text Label */}
       <Text
-        position={[0, -0.46, 0]}
+        position={[0, -0.52, 0]}
         fontSize={0.145}
-        color={isSelected || hovered ? '#2d221c' : '#5c4a3f'}
+        color={isSelected || hovered ? '#1e293b' : '#475569'}
         anchorX="center"
         anchorY="middle"
       >
@@ -379,9 +390,9 @@ function SkillNode({
 
       {/* Level Badge */}
       <Text
-        position={[0, -0.66, 0]}
+        position={[0, -0.72, 0]}
         fontSize={0.11}
-        color="#8da178"
+        color="#15803d"
         anchorX="center"
         anchorY="middle"
       >
@@ -433,39 +444,39 @@ export function Skills3D({ activeCategory, selectedSkill, onSelectSkill }: Skill
 
   return (
     <group position={[0, 0, 0]}>
-      {/* Central Whimsical Star / Mana Core */}
+      {/* Central Ancient Zelda Sky Relic Core */}
       <group ref={coreRef} position={[0, 0, 0]}>
         <mesh castShadow>
-          <octahedronGeometry args={[0.56, 2]} />
+          <octahedronGeometry args={[0.62, 1]} />
           <meshPhysicalMaterial
-            color="#ffd166"
+            color="#fbbf24"
             emissive="#f59e0b"
-            emissiveIntensity={0.65}
-            roughness={0.15}
-            clearcoat={0.9}
-            clearcoatRoughness={0.1}
+            emissiveIntensity={0.8}
+            roughness={0.12}
+            clearcoat={1.0}
+            clearcoatRoughness={0.08}
           />
         </mesh>
 
-        {/* Outer Rotating Pastel Rings */}
+        {/* Orbiting Emerald & Cyan Runic Rings */}
         <mesh ref={ring1Ref}>
-          <torusGeometry args={[0.96, 0.016, 24, 64]} />
-          <meshBasicMaterial color="#8da178" transparent opacity={0.65} />
+          <torusGeometry args={[1.05, 0.02, 24, 64]} />
+          <meshBasicMaterial color="#10b981" transparent opacity={0.7} />
         </mesh>
         <mesh ref={ring2Ref}>
-          <torusGeometry args={[1.25, 0.014, 24, 64]} />
-          <meshBasicMaterial color="#ff9e80" transparent opacity={0.55} />
+          <torusGeometry args={[1.38, 0.016, 24, 64]} />
+          <meshBasicMaterial color="#38bdf8" transparent opacity={0.6} />
         </mesh>
 
-        <pointLight color="#ffd166" intensity={2.2} distance={5.5} />
+        <pointLight color="#facc15" intensity={2.8} distance={6.0} />
       </group>
 
-      {/* Constellation Network Lines */}
+      {/* Constellation Golden Ley-Lines */}
       <lineSegments geometry={lineGeometry}>
         <lineBasicMaterial
-          color="#8da178"
+          color="#facc15"
           transparent
-          opacity={0.28}
+          opacity={0.35}
           depthWrite={false}
         />
       </lineSegments>
