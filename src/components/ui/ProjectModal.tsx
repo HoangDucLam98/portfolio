@@ -67,6 +67,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                 <img
                   src={project.iconUrl}
                   alt={`${project.title} Icon`}
+                  decoding="async"
                   className="w-16 h-16 rounded-2xl shadow-md border-2 border-[#e6d8cb] shrink-0 object-cover bg-white"
                 />
               )}
@@ -113,6 +114,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
               <img
                 src={currentDisplayImage}
                 alt={`${project.title} Gameplay Screenshot ${activeImgIndex + 1}`}
+                decoding="async"
                 className="w-full h-full object-cover object-center transition-all duration-300"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
@@ -141,6 +143,8 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     <img
                       src={imgUrl}
                       alt={`Thumbnail ${idx + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover"
                     />
                   </button>

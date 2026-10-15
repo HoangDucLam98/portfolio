@@ -158,7 +158,7 @@ function createGameEngineTexture(): THREE.CanvasTexture {
   return texture;
 }
 
-export function WorkspaceModel() {
+export function WorkspaceModel({ isLowPowerDevice = false }: { isLowPowerDevice?: boolean }) {
   const [hovered, setHovered] = useState<string | null>(null);
   const steamRef = useRef<THREE.Group>(null);
   const fanRef1 = useRef<THREE.Mesh>(null);
@@ -624,13 +624,15 @@ export function WorkspaceModel() {
       </group>
 
       {/* Soft Contact Shadows on Island Grass */}
-      <ContactShadows
-        position={[0, 0.54, 0]}
-        opacity={0.35}
-        scale={3.8}
-        blur={1.8}
-        far={1.2}
-      />
+      {!isLowPowerDevice && (
+        <ContactShadows
+          position={[0, 0.54, 0]}
+          opacity={0.35}
+          scale={3.8}
+          blur={1.8}
+          far={1.2}
+        />
+      )}
     </group>
   );
 }

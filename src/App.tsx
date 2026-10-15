@@ -1,24 +1,34 @@
-import { useState, useEffect } from 'react';
-import { SceneContainer } from './components/3d/SceneContainer';
+import { lazy, Suspense, useState, useEffect } from 'react';
 import { HeroOverlay } from './components/ui/HeroOverlay';
 import { AboutOverlay } from './components/ui/AboutOverlay';
 import { SkillsOverlay } from './components/ui/SkillsOverlay';
 import { ProjectsOverlay } from './components/ui/ProjectsOverlay';
 import { ContactOverlay } from './components/ui/ContactOverlay';
-import { ProjectModal } from './components/ui/ProjectModal';
 import { NavigationHUD } from './components/ui/NavigationHUD';
 import { LoadingScreen } from './components/ui/LoadingScreen';
 import { WebGLCheck } from './components/ui/WebGLCheck';
 import { AchievementToast } from './components/ui/AchievementToast';
-import { AchievementsModal } from './components/ui/AchievementsModal';
-import { MiniGameHUD } from './components/ui/MiniGameHUD';
 import { achievementsManager } from './game/achievements';
 import { soundManager } from './audio/audioEngine';
 import type { SkillItem, ProjectItem, TimeOfDay } from './types';
 
+const loadSceneContainer = () => import('./components/3d/SceneContainer');
+const SceneContainer = lazy(() =>
+  loadSceneContainer().then(({ SceneContainer }) => ({ default: SceneContainer }))
+);
+const ProjectModal = lazy(() =>
+  import('./components/ui/ProjectModal').then(({ ProjectModal }) => ({ default: ProjectModal }))
+);
+const AchievementsModal = lazy(() =>
+  import('./components/ui/AchievementsModal').then(({ AchievementsModal }) => ({ default: AchievementsModal }))
+);
+const MiniGameHUD = lazy(() =>
+  import('./components/ui/MiniGameHUD').then(({ MiniGameHUD }) => ({ default: MiniGameHUD }))
+);
+
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [isEntering, setIsEntering] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
 
   // Advanced Feature States
@@ -45,22 +55,26 @@ export function App() {
 
   // Scrollytelling scroll listener
   useEffect(() => {
-    const handleScroll = () => {
-      if (isMiniGamePlaying) return;
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const current = window.scrollY;
-      const progress = totalScroll > 0 ? current / totalScroll : 0;
-      setScrollProgress(progress);
+    let scheduledFrame = 0;
 
-      const sectionIndex = Math.min(
-        Math.floor(progress * 5),
-        4
-      );
-      setActiveSection(sectionIndex);
+    const handleScroll = () => {
+      if (isMiniGamePlaying || scheduledFrame !== 0) return;
+
+      scheduledFrame = window.requestAnimationFrame(() => {
+        scheduledFrame = 0;
+        const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = totalScroll > 0 ? window.scrollY / totalScroll : 0;
+        const sectionIndex = Math.min(Math.floor(progress * 5), 4);
+        setActiveSection((current) => current === sectionIndex ? current : sectionIndex);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (scheduledFrame !== 0) window.cancelAnimationFrame(scheduledFrame);
+    };
   }, [isMiniGamePlaying]);
 
   // Global Key Shortcut [G] to launch mini-game, [ESC] to exit
@@ -84,8 +98,14 @@ export function App() {
   }, [isMiniGamePlaying]);
 
   const handleLoaded = () => {
-    setIsLoading(false);
-    achievementsManager.unlock('first_steps');
+    setIsEntering(true);
+    void loadSceneContainer().then(() => {
+      achievementsManager.unlock('first_steps');
+      setIsLoading(false);
+      setIsEntering(false);
+    }).catch(() => {
+      setIsEntering(false);
+    });
   };
 
   const scrollToSection = (index: number) => {
@@ -121,49 +141,60 @@ export function App() {
   return (
     <WebGLCheck>
       {/* 3D Loading Screen */}
-      {isLoading && <LoadingScreen onLoaded={handleLoaded} />}
+      {isLoading && <LoadingScreen onLoaded={handleLoaded} isEntering={isEntering} />}
 
       {/* Achievement Toast Banner */}
       <AchievementToast />
 
       {/* Achievements Showcase Modal */}
-      <AchievementsModal
-        isOpen={isAchievementsOpen}
-        onClose={() => setIsAchievementsOpen(false)}
-      />
+      {isAchievementsOpen && (
+        <Suspense fallback={null}>
+          <AchievementsModal
+            isOpen
+            onClose={() => setIsAchievementsOpen(false)}
+          />
+        </Suspense>
+      )}
 
       {/* Playable 3D Mini-Game Overlay */}
-      <MiniGameHUD
-        isPlaying={isMiniGamePlaying}
-        starsCollected={starsCollected}
-        totalStars={totalStars}
-        hasWon={hasWonMiniGame}
-        onExit={() => setIsMiniGamePlaying(false)}
-        onRestart={handleRestartMiniGame}
-      />
+      {isMiniGamePlaying && (
+        <Suspense fallback={null}>
+          <MiniGameHUD
+            isPlaying
+            starsCollected={starsCollected}
+            totalStars={totalStars}
+            hasWon={hasWonMiniGame}
+            onExit={() => setIsMiniGamePlaying(false)}
+            onRestart={handleRestartMiniGame}
+          />
+        </Suspense>
+      )}
 
       {/* Fixed 3D WebGL Canvas Scene */}
-      <SceneContainer
-        scrollProgress={scrollProgress}
-        activeSection={activeSection}
-        timeOfDay={timeOfDay}
-        dioramaMode={dioramaMode}
-        isMiniGamePlaying={isMiniGamePlaying}
-        onStarsCountChange={(count, total) => {
-          setStarsCollected(count);
-          setTotalStars(total);
-        }}
-        onMiniGameWin={() => setHasWonMiniGame(true)}
-        activeSkillCategory={activeSkillCategory}
-        selectedSkill={selectedSkill}
-        onSelectSkill={setSelectedSkill}
-        activeProjectIndex={activeProjectIndex}
-        onSelectProject={handleOpenProjectModal}
-        onHoverProjectIndex={setActiveProjectIndex}
-        isSubmittingContact={isSubmittingContact}
-        isContactSuccess={isContactSuccess}
-        isContactFocused={isContactFocused}
-      />
+      {!isLoading && (
+        <Suspense fallback={null}>
+          <SceneContainer
+            activeSection={activeSection}
+            timeOfDay={timeOfDay}
+            dioramaMode={dioramaMode}
+            isMiniGamePlaying={isMiniGamePlaying}
+            onStarsCountChange={(count, total) => {
+              setStarsCollected(count);
+              setTotalStars(total);
+            }}
+            onMiniGameWin={() => setHasWonMiniGame(true)}
+            activeSkillCategory={activeSkillCategory}
+            selectedSkill={selectedSkill}
+            onSelectSkill={setSelectedSkill}
+            activeProjectIndex={activeProjectIndex}
+            onSelectProject={handleOpenProjectModal}
+            onHoverProjectIndex={setActiveProjectIndex}
+            isSubmittingContact={isSubmittingContact}
+            isContactSuccess={isContactSuccess}
+            isContactFocused={isContactFocused}
+          />
+        </Suspense>
+      )}
 
       {/* Top Floating Navigation HUD (Hidden during mini-game) */}
       {!isMiniGamePlaying && (
@@ -225,10 +256,14 @@ export function App() {
       </main>
 
       {/* Project Details Modal */}
-      <ProjectModal
-        project={modalProject}
-        onClose={() => setModalProject(null)}
-      />
+      {modalProject && (
+        <Suspense fallback={null}>
+          <ProjectModal
+            project={modalProject}
+            onClose={() => setModalProject(null)}
+          />
+        </Suspense>
+      )}
     </WebGLCheck>
   );
 }

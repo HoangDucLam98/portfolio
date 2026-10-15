@@ -10,6 +10,7 @@ interface FloatingParticlesProps {
 
 export function FloatingParticles({ count = 220, color = '#ffe5b4', size = 0.04 }: FloatingParticlesProps) {
   const pointsRef = useRef<THREE.Points>(null);
+  const updateAccumulator = useRef(0);
 
   const [positions, scales] = useMemo(() => {
     const pos = new Float32Array(count * 3);
@@ -25,15 +26,20 @@ export function FloatingParticles({ count = 220, color = '#ffe5b4', size = 0.04 
     return [pos, sca];
   }, [count]);
 
-  useFrame(({ clock }) => {
+  useFrame(({ clock }, delta) => {
     if (!pointsRef.current) return;
     const t = clock.getElapsedTime() * 0.15;
     pointsRef.current.rotation.y = t * 0.12;
 
+    updateAccumulator.current += Math.min(delta, 0.1);
+    if (updateAccumulator.current < 1 / 30) return;
+    const updateDelta = updateAccumulator.current;
+    updateAccumulator.current = 0;
+
     const posArray = pointsRef.current.geometry.attributes.position.array as Float32Array;
     for (let i = 0; i < count; i++) {
       const idx = i * 3 + 1;
-      posArray[idx] += Math.sin(t * 2 + i) * 0.0025;
+      posArray[idx] += Math.sin(t * 2 + i) * 0.15 * updateDelta;
       if (posArray[idx] > 8) posArray[idx] = -1;
       if (posArray[idx] < -1) posArray[idx] = 8;
     }

@@ -9,4 +9,20 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  build: {
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          minSize: 20_000,
+          groups: [
+            {
+              name: 'three-vendor',
+              test: /node_modules[\\/](?:three|@react-three|maath)[\\/]/,
+              maxSize: 450_000,
+            },
+          ],
+        },
+      },
+    },
+  },
 })

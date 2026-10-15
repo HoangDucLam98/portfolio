@@ -71,6 +71,8 @@ export function ProjectsOverlay({
               <img
                 src={currentProject.imageUrl}
                 alt={currentProject.title}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 opacity-70 group-hover:opacity-50 transition-opacity" />
@@ -105,6 +107,8 @@ export function ProjectsOverlay({
                 <img
                   src={currentProject.iconUrl}
                   alt={`${currentProject.title} Icon`}
+                  loading="lazy"
+                  decoding="async"
                   className="w-14 h-14 rounded-2xl shadow-md border-2 border-[#e6d8cb] shrink-0 object-cover bg-white"
                 />
               )}
@@ -213,12 +217,16 @@ export function ProjectsOverlay({
                     <img
                       src={project.imageUrl}
                       alt={project.title}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />
                     {project.iconUrl && (
                       <img
                         src={project.iconUrl}
                         alt="icon"
+                        loading="lazy"
+                        decoding="async"
                         className="absolute bottom-1.5 left-1.5 w-7 h-7 rounded-lg border-2 border-white shadow-md object-cover bg-white"
                       />
                     )}

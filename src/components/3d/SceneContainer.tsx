@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
 import { Canvas } from '@react-three/fiber';
 import { Environment } from '@react-three/drei';
@@ -12,8 +12,18 @@ import { Contact3D } from './Contact3D';
 import { CameraController } from './CameraController';
 import type { SkillItem, ProjectItem, TimeOfDay } from '../../types';
 
+function shouldUseLowPowerRendering() {
+  if (typeof window === 'undefined') return false;
+
+  const device = navigator as Navigator & { deviceMemory?: number };
+  return (
+    window.matchMedia('(max-width: 768px)').matches ||
+    (device.hardwareConcurrency > 0 && device.hardwareConcurrency <= 4) ||
+    (device.deviceMemory !== undefined && device.deviceMemory <= 4)
+  );
+}
+
 interface SceneContainerProps {
-  scrollProgress: number;
   activeSection: number;
   timeOfDay: TimeOfDay;
   dioramaMode: boolean;
@@ -36,7 +46,6 @@ interface SceneContainerProps {
 }
 
 export function SceneContainer({
-  scrollProgress,
   activeSection,
   timeOfDay,
   dioramaMode,
@@ -53,6 +62,17 @@ export function SceneContainer({
   isContactSuccess,
   isContactFocused,
 }: SceneContainerProps) {
+  const [isLowPowerDevice, setIsLowPowerDevice] = useState(shouldUseLowPowerRendering);
+
+  useEffect(() => {
+    const updateRenderingProfile = () => setIsLowPowerDevice(shouldUseLowPowerRendering());
+    window.addEventListener('resize', updateRenderingProfile, { passive: true });
+    return () => window.removeEventListener('resize', updateRenderingProfile);
+  }, []);
+
+  const dpr: [number, number] = isLowPowerDevice ? [1, 1.25] : [1, 1.5];
+  const shadowMapSize = isLowPowerDevice ? 512 : 1024;
+
   // Vibrant, high-contrast Lighting & Color settings based on Time of Day
   const envConfig = {
     day: {
@@ -114,13 +134,13 @@ export function SceneContainer({
   return (
     <div className={`fixed inset-0 pointer-events-auto z-0 ${dioramaMode ? 'diorama-blur-mask' : ''}`}>
       <Canvas
-        shadows
-        dpr={[1, 2]}
+        shadows={!isLowPowerDevice}
+        dpr={dpr}
         camera={{ position: [0, 2.2, 6.2], fov: dioramaMode ? 36 : 45, near: 0.1, far: 100 }}
         gl={{
-          antialias: true,
+          antialias: !isLowPowerDevice,
           alpha: true,
-          powerPreference: 'high-performance',
+          powerPreference: isLowPowerDevice ? 'low-power' : 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.25,
         }}
@@ -143,8 +163,8 @@ export function SceneContainer({
             position={envConfig.sunPos}
             intensity={envConfig.sunIntensity}
             color={envConfig.sunColor}
-            castShadow
-            shadow-mapSize={[2048, 2048]}
+            castShadow={!isLowPowerDevice}
+            shadow-mapSize={[shadowMapSize, shadowMapSize]}
             shadow-bias={-0.0001}
             shadow-camera-near={0.5}
             shadow-camera-far={28}
@@ -178,52 +198,58 @@ export function SceneContainer({
 
           {/* Global Floor and Stardust */}
           <CyberGrid />
-          <FloatingParticles count={180} color={envConfig.particles1} size={0.045} />
-          <FloatingParticles count={80} color={envConfig.particles2} size={0.05} />
+          <FloatingParticles count={isLowPowerDevice ? 60 : 140} color={envConfig.particles1} size={0.045} />
+          <FloatingParticles count={isLowPowerDevice ? 30 : 60} color={envConfig.particles2} size={0.05} />
 
           {/* Section 0 & 1: 3D Workspace Scene */}
-          <group visible={activeSection === 0 || activeSection === 1}>
-            <WorkspaceModel />
-            {/* Playable 3D Mini-Game Character & Stars */}
-            <SproutlingPlayer
-              isPlaying={isMiniGamePlaying}
-              onStarsCountChange={onStarsCountChange}
-              onWin={onMiniGameWin}
-            />
-          </group>
+          {(activeSection === 0 || activeSection === 1) && (
+            <group>
+              <WorkspaceModel isLowPowerDevice={isLowPowerDevice} />
+              {/* Playable 3D Mini-Game Character & Stars */}
+              <SproutlingPlayer
+                isPlaying={isMiniGamePlaying}
+                onStarsCountChange={onStarsCountChange}
+                onWin={onMiniGameWin}
+              />
+            </group>
+          )}
 
           {/* Section 2: 3D Skills Constellation */}
-          <group visible={activeSection === 2}>
-            <Skills3D
-              activeCategory={activeSkillCategory}
-              selectedSkill={selectedSkill}
-              onSelectSkill={onSelectSkill}
-            />
-          </group>
+          {activeSection === 2 && (
+            <group>
+              <Skills3D
+                activeCategory={activeSkillCategory}
+                selectedSkill={selectedSkill}
+                onSelectSkill={onSelectSkill}
+              />
+            </group>
+          )}
 
           {/* Section 3: 3D Projects Showcase Carousel */}
-          <group visible={activeSection === 3}>
-            <Projects3D
-              activeIndex={activeProjectIndex}
-              onSelectProject={onSelectProject}
-              onHoverIndex={onHoverProjectIndex}
-            />
-          </group>
+          {activeSection === 3 && (
+            <group>
+              <Projects3D
+                activeIndex={activeProjectIndex}
+                onSelectProject={onSelectProject}
+                onHoverIndex={onHoverProjectIndex}
+              />
+            </group>
+          )}
 
           {/* Section 4: 3D Contact Campfire */}
-          <group visible={activeSection === 4}>
-            <Contact3D
-              isSubmitting={isSubmittingContact}
-              isSuccess={isContactSuccess}
-              isFocused={isContactFocused}
-            />
-          </group>
+          {activeSection === 4 && (
+            <group>
+              <Contact3D
+                isSubmitting={isSubmittingContact}
+                isSuccess={isContactSuccess}
+                isFocused={isContactFocused}
+              />
+            </group>
+          )}
 
           {/* Scrollytelling Camera Controller (Disabled when mini-game is playing) */}
           {!isMiniGamePlaying && (
             <CameraController
-              scrollProgress={scrollProgress}
-              activeSection={activeSection}
             />
           )}
         </Suspense>
