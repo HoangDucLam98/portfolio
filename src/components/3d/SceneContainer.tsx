@@ -130,8 +130,10 @@ export function SceneContainer({
           <color attach="background" args={[envConfig.bg]} />
           <fog attach="fog" args={[envConfig.bg, envConfig.fogNear, envConfig.fogFar]} />
 
-          {/* Studio HDR Environment for Specular Gloss & Reflections */}
-          <Environment preset={envConfig.envPreset} environmentIntensity={0.65} />
+          {/* Studio HDR Environment for Specular Gloss & Reflections (Isolated so it never blocks scene) */}
+          <Suspense fallback={null}>
+            <Environment preset={envConfig.envPreset} environmentIntensity={0.65} />
+          </Suspense>
 
           {/* Balanced Ambient Lighting - Eliminates Washed Out Look */}
           <ambientLight color={envConfig.ambientColor} intensity={envConfig.ambientIntensity} />
