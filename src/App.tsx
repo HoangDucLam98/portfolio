@@ -28,7 +28,7 @@ const MiniGameHUD = lazy(() =>
 
 export function App() {
   const [isLoading, setIsLoading] = useState(true);
-  const [isEntering, setIsEntering] = useState(false);
+  const [isSceneAvailable, setIsSceneAvailable] = useState(false);
   const [activeSection, setActiveSection] = useState(0);
 
   // Advanced Feature States
@@ -52,6 +52,39 @@ export function App() {
   const [isSubmittingContact, setIsSubmittingContact] = useState(false);
   const [isContactSuccess, setIsContactSuccess] = useState(false);
   const [isContactFocused, setIsContactFocused] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+
+    void loadSceneContainer()
+      .then(() => {
+        if (isCancelled) return;
+        setIsSceneAvailable(true);
+      })
+      .catch(() => {
+        if (!isCancelled) setIsSceneAvailable(false);
+      })
+      .finally(() => {
+        if (isCancelled) return;
+        achievementsManager.unlock('first_steps');
+        setIsLoading(false);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const startAmbient = () => soundManager.startAmbient();
+    window.addEventListener('pointerdown', startAmbient, { once: true });
+    window.addEventListener('keydown', startAmbient, { once: true });
+
+    return () => {
+      window.removeEventListener('pointerdown', startAmbient);
+      window.removeEventListener('keydown', startAmbient);
+    };
+  }, []);
 
   // Scrollytelling scroll listener
   useEffect(() => {
@@ -97,17 +130,6 @@ export function App() {
     return () => window.removeEventListener('keydown', handleGlobalKey);
   }, [isMiniGamePlaying]);
 
-  const handleLoaded = () => {
-    setIsEntering(true);
-    void loadSceneContainer().then(() => {
-      achievementsManager.unlock('first_steps');
-      setIsLoading(false);
-      setIsEntering(false);
-    }).catch(() => {
-      setIsEntering(false);
-    });
-  };
-
   const scrollToSection = (index: number) => {
     if (isMiniGamePlaying) {
       setIsMiniGamePlaying(false);
@@ -141,7 +163,7 @@ export function App() {
   return (
     <WebGLCheck>
       {/* 3D Loading Screen */}
-      {isLoading && <LoadingScreen onLoaded={handleLoaded} isEntering={isEntering} />}
+      {isLoading && <LoadingScreen />}
 
       {/* Achievement Toast Banner */}
       <AchievementToast />
@@ -171,7 +193,7 @@ export function App() {
       )}
 
       {/* Fixed 3D WebGL Canvas Scene */}
-      {!isLoading && (
+      {!isLoading && isSceneAvailable && (
         <Suspense fallback={null}>
           <SceneContainer
             activeSection={activeSection}

@@ -1,21 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Gamepad2, Sparkles, CheckCircle2, Play } from 'lucide-react';
-import { soundManager } from '../../audio/audioEngine';
+import { Gamepad2, Sparkles, LoaderCircle } from 'lucide-react';
 
-interface LoadingScreenProps {
-  onLoaded: () => void;
-  isEntering: boolean;
-}
-
-const READY_MESSAGE = 'World Generation Complete. Press Start to Begin!';
-
-export function LoadingScreen({ onLoaded, isEntering }: LoadingScreenProps) {
-  const handleEnter = () => {
-    soundManager.playSuccess();
-    soundManager.startAmbient();
-    onLoaded();
-  };
-
+export function LoadingScreen() {
   return (
     <AnimatePresence>
       <motion.div
@@ -54,44 +40,33 @@ export function LoadingScreen({ onLoaded, isEntering }: LoadingScreenProps) {
           {/* Progress Bar with Bright Pastel Gradient */}
           <div className="w-full bg-[#f4ebe1] rounded-full h-3.5 p-0.5 border border-[#e2d5c8] mb-4 overflow-hidden">
             <motion.div
-              className="h-full rounded-full bg-gradient-to-r from-[#8da178] via-[#ffd166] to-[#ff9e80]"
-              style={{ width: '100%' }}
-              transition={{ ease: 'easeOut', duration: 0.2 }}
+              className="h-full w-1/2 rounded-full bg-gradient-to-r from-[#8da178] via-[#ffd166] to-[#ff9e80]"
+              animate={{ x: ['-100%', '200%'] }}
+              transition={{ duration: 1.3, ease: 'easeInOut', repeat: Infinity }}
             />
           </div>
 
           {/* Percentage & Status */}
           <div className="w-full flex items-center justify-between font-mono text-xs text-[#786558] mb-4 font-bold">
             <span className="flex items-center gap-1.5 text-[#8da178]">
-              <Play className="w-3 h-3 fill-current" />
-              {isEntering ? 'LOADING 3D STUDIO' : 'GAME ENGINE BOOT'}
+              <LoaderCircle className="w-3 h-3 animate-spin" />
+              LOADING 3D STUDIO
             </span>
             <span className="text-[#38271e] text-sm">
-              {isEntering ? 'LOADING' : 'READY'}
+              LOADING
             </span>
           </div>
 
           {/* Game Log Box */}
           <div className="w-full bg-[#fbf4eb] rounded-2xl p-3 border border-[#e6d8cb] text-left font-mono text-[11px] text-[#4a332d] min-h-[42px] flex items-center mb-6">
             <span className="text-[#8da178] mr-2">🍄</span>
-            <span className="truncate">
-              {isEntering ? 'Preparing the interactive 3D studio...' : READY_MESSAGE}
-            </span>
+            <span className="truncate">Preparing the interactive 3D studio...</span>
           </div>
 
-          {/* Enter Button */}
-          <motion.button
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            onClick={handleEnter}
-            disabled={isEntering}
-            className="w-full py-4 px-6 rounded-2xl bg-[#4a332d] hover:bg-[#38271e] text-white font-heading font-extrabold text-sm tracking-wider uppercase shadow-xl shadow-[#4a332d]/25 border border-[#4a332d] transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75 disabled:cursor-wait"
-          >
-            <CheckCircle2 className="w-4 h-4 text-[#ffd166]" />
-            {isEntering ? 'Preparing Studio...' : 'Press Start // Enter Game'}
-          </motion.button>
+          <div className="text-xs font-mono text-[#786558] flex items-center gap-2 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#ff9e80] animate-ping" />
+            Entering the studio automatically...
+          </div>
         </div>
       </motion.div>
     </AnimatePresence>
