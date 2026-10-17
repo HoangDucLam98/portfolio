@@ -23,9 +23,13 @@
     background-color: var(--color-bg-cream);
     color: var(--color-text-brown);
     overflow-x: hidden;
-    user-select: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  canvas {
+    user-select: none;
+    -webkit-user-select: none;
   }
 
   /* Custom Cute Scrollbar */

@@ -34,7 +34,7 @@ export function ProjectsOverlay({
     >
       {/* Section Header */}
       <div className="mb-6">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#e76f51] mb-2 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#a63e24] mb-2 shadow-sm">
           <Gamepad2 className="w-3.5 h-3.5" />
           <span>STATION 04 // 3D GAME SHOWCASE</span>
         </div>
@@ -82,8 +82,9 @@ export function ProjectsOverlay({
                 <span
                   className="px-3 py-1 rounded-xl text-xs font-heading font-bold tracking-wider uppercase backdrop-blur-md shadow-sm"
                   style={{
-                    backgroundColor: `${currentProject.color}ee`,
-                    color: '#fff',
+                    backgroundColor: '#fbf4ebf2',
+                    color: '#38271e',
+                    border: `2px solid ${currentProject.color}`,
                   }}
                 >
                   ★ {currentProject.category} ★
@@ -116,7 +117,7 @@ export function ProjectsOverlay({
                 <h3 className="text-2xl sm:text-3xl font-extrabold font-heading text-[#38271e] truncate">
                   {currentProject.title}
                 </h3>
-                <p className="text-xs sm:text-sm text-[#e76f51] font-heading font-bold mb-1">
+                <p className="text-xs sm:text-sm text-[#a63e24] font-heading font-bold mb-1">
                   {currentProject.subtitle}
                 </p>
                 <p className="text-xs sm:text-sm text-[#5c4a3f] leading-relaxed font-medium line-clamp-2">
@@ -212,7 +213,7 @@ export function ProjectsOverlay({
                   className={`group relative rounded-2xl overflow-hidden border-2 cursor-pointer transition-all duration-300 shadow-sm ${
                     isSelected
                       ? 'border-[#e76f51] ring-4 ring-[#e76f51]/20 scale-[1.02] shadow-lg'
-                      : 'border-[#e6d8cb] hover:border-[#8da178] opacity-85 hover:opacity-100'
+                      : 'border-[#e6d8cb] hover:border-[#8da178]'
                   }`}
                 >
                   <div className="w-full h-24 sm:h-28 overflow-hidden bg-[#f4ebe1] relative">

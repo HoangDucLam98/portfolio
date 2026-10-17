@@ -40,7 +40,7 @@ export function AchievementToast() {
 
             {/* Achievement Text */}
             <div className="flex-1">
-              <div className="flex items-center gap-1.5 text-[10px] font-heading font-extrabold text-[#8da178] uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 text-[10px] font-heading font-extrabold text-[#526545] uppercase tracking-wider">
                 <Trophy className="w-3 h-3 text-[#ffd166]" />
                 QUEST ACHIEVED!
               </div>

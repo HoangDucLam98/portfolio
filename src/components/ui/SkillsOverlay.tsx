@@ -34,7 +34,7 @@ export function SkillsOverlay({
     >
       {/* Section Header */}
       <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#8da178] mb-3 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#526545] mb-3 shadow-sm">
           <Gamepad2 className="w-3.5 h-3.5" />
           <span>STATION 03 // GAME DEV INVENTORY & SKILL TREE</span>
         </div>
@@ -100,7 +100,7 @@ export function SkillsOverlay({
                       className="w-3.5 h-3.5 rounded-full"
                       style={{ backgroundColor: skill.color }}
                     />
-                    <span className="text-[11px] font-mono text-[#e76f51] font-bold">
+                    <span className="text-[11px] font-mono text-[#bc4b2d] font-bold">
                       LVL {skill.level}
                     </span>
                   </div>
@@ -133,7 +133,7 @@ export function SkillsOverlay({
                   className="inline-block px-3 py-1 rounded-xl text-[10px] font-heading font-bold uppercase mb-1.5"
                   style={{
                     backgroundColor: `${activeSkill.color}25`,
-                    color: activeSkill.color,
+                    color: '#3d3328',
                   }}
                 >
                   {activeSkill.category.toUpperCase()}
@@ -174,7 +174,7 @@ export function SkillsOverlay({
                 <CheckCircle className="w-4 h-4 text-[#8da178]" />
                 {activeSkill.projectsCount}+ Shipped Mechanics
               </span>
-              <span className="text-[#e76f51]">NODE ACTIVE</span>
+              <span className="text-[#a63e24]">NODE ACTIVE</span>
             </div>
           </motion.div>
         </div>

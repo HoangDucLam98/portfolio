@@ -97,7 +97,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
     >
       {/* Section Header */}
       <div className="mb-8">
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#8da178] mb-3 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#526545] mb-3 shadow-sm">
           <BookOpen className="w-3.5 h-3.5" />
           <span>STATION 02 // GAME ENGINE & DEV LORE</span>
         </div>
@@ -123,7 +123,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
                 sproutling-engine://hoang-duc-lam
               </span>
             </div>
-            <div className="text-[11px] font-heading font-bold text-[#e76f51] flex items-center gap-1">
+            <div className="text-[11px] font-heading font-bold text-[#a63e24] flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5" />
               GAME ENGINE CLI
             </div>
@@ -132,7 +132,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
           {/* Terminal Body */}
           <div className="p-5 font-mono text-xs text-[#38271e] h-[290px] overflow-y-auto flex flex-col gap-2.5 bg-[#fffdfa]">
             {history.map((item, idx) => (
-              <div key={`hist-${idx}`} className={item.type === 'input' ? 'text-[#e76f51] font-bold' : 'text-[#4a332d]'}>
+              <div key={`hist-${idx}`} className={item.type === 'input' ? 'text-[#a63e24] font-bold' : 'text-[#4a332d]'}>
                 {item.text}
               </div>
             ))}
@@ -163,7 +163,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
             }}
             className="p-3 bg-[#f4ebe1] border-t-2 border-[#e6d8cb] flex items-center gap-2"
           >
-            <span className="text-[#8da178] font-mono text-xs font-bold">alex@game-studio:~$</span>
+            <span className="text-[#526545] font-mono text-xs font-bold">alex@game-studio:~$</span>
             <input
               type="text"
               value={terminalInput}
@@ -193,7 +193,7 @@ export function AboutOverlay({ onGoToProjects, onGoToContact }: AboutOverlayProp
                 <div key={exp.company} className="relative pl-5 border-l-2 border-[#e6d8cb] hover:border-[#8da178] transition-colors group">
                   <div className="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-[#c8b6a6] group-hover:bg-[#8da178] transition-colors" />
                   <div className="flex items-center justify-between text-xs font-mono text-[#786558] mb-1">
-                    <span className="text-[#e76f51] font-bold">{exp.role}</span>
+                    <span className="text-[#a63e24] font-bold">{exp.role}</span>
                     <span>{exp.period}</span>
                   </div>
                   <div className="text-sm font-heading font-bold text-[#38271e] mb-1">{exp.company}</div>

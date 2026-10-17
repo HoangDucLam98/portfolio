@@ -88,7 +88,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
                     className="px-3 py-0.5 rounded-full text-xs font-heading font-bold tracking-wider uppercase"
                     style={{
                       backgroundColor: `${project.color}25`,
-                      color: project.color,
+                      color: '#3d3328',
                       border: `2px solid ${project.color}60`,
                     }}
                   >
@@ -240,10 +240,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           {/* Deep Architectural Breakdown */}
           <div>
-            <h4 className="text-xs font-heading font-extrabold text-[#8da178] uppercase tracking-widest mb-2 flex items-center gap-1.5">
+            <h3 className="text-xs font-heading font-extrabold text-[#526545] uppercase tracking-widest mb-2 flex items-center gap-1.5">
               <Gamepad2 className="w-4 h-4" />
               GAMEPLAY MECHANICS & ARCHITECTURE
-            </h4>
+            </h3>
             <p className="text-sm sm:text-base text-[#5c4a3f] leading-relaxed font-medium">
               {project.longDescription}
             </p>
@@ -251,10 +251,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           {/* Core Technical Highlights */}
           <div>
-            <h4 className="text-xs font-heading font-extrabold text-[#e76f51] uppercase tracking-widest mb-3 flex items-center gap-1.5">
+            <h3 className="text-xs font-heading font-extrabold text-[#bc4b2d] uppercase tracking-widest mb-3 flex items-center gap-1.5">
               <Sparkles className="w-4 h-4" />
               KEY GAMEPLAY FEATURES & SHADERS
-            </h4>
+            </h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {project.features.map((feature, i) => (
                 <div
@@ -270,10 +270,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
 
           {/* Tech Stack Badges */}
           <div>
-            <h4 className="text-xs font-heading font-extrabold text-[#786558] uppercase tracking-widest mb-2 flex items-center gap-1.5">
+            <h3 className="text-xs font-heading font-extrabold text-[#786558] uppercase tracking-widest mb-2 flex items-center gap-1.5">
               <Layers className="w-4 h-4" />
               GAME ENGINE & PIPELINE
-            </h4>
+            </h3>
             <div className="flex flex-wrap gap-2">
               {project.techStack.map((tech) => (
                 <span

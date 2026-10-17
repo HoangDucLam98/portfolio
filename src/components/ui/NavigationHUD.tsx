@@ -71,7 +71,7 @@ export function NavigationHUD({
               SPROUTLING GAMES
               <span className="w-2 h-2 rounded-full bg-[#8da178] animate-pulse" />
             </div>
-            <div className="text-[10px] font-mono text-[#8da178] font-bold tracking-tight">
+            <div className="text-[10px] font-mono text-[#526545] font-bold tracking-tight">
               HOANG DUC LAM // GAME DEV
             </div>
           </div>
@@ -190,6 +190,8 @@ export function NavigationHUD({
           {/* Mobile Menu Toggle */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
             className="lg:hidden p-2 rounded-2xl glass-panel border-2 border-[#e6d8cb] text-[#38271e] hover:text-[#8da178] transition-colors cursor-pointer bg-white"
           >
             {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

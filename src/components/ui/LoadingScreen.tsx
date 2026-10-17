@@ -25,7 +25,7 @@ export function LoadingScreen() {
 
           <div className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-[#8da178]/15 border border-[#8da178]/30 mb-3">
             <Sparkles className="w-3.5 h-3.5 text-[#8da178]" />
-            <span className="text-xs font-mono text-[#8da178] font-bold uppercase tracking-widest">
+            <span className="text-xs font-mono text-[#526545] font-bold uppercase tracking-widest">
               Sproutling Game Studio
             </span>
           </div>
