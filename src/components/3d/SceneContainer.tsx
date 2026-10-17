@@ -1,7 +1,7 @@
 import { Suspense, useEffect, useState } from 'react';
 import * as THREE from 'three';
-import { Canvas } from '@react-three/fiber';
-import { Environment } from '@react-three/drei';
+import { Canvas, useThree } from '@react-three/fiber';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import { CyberGrid } from './CyberGrid';
 import { FloatingParticles } from './FloatingParticles';
 import { WorkspaceModel } from './WorkspaceModel';
@@ -26,6 +26,25 @@ function shouldUseLowPowerRendering() {
 function prefersReducedMotion() {
   if (typeof window === 'undefined') return false;
   return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+function StudioEnvironment() {
+  const { gl, scene } = useThree();
+
+  useEffect(() => {
+    const pmremGenerator = new THREE.PMREMGenerator(gl);
+    const environmentMap = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+    scene.environment = environmentMap;
+    scene.environmentIntensity = 0.65;
+
+    return () => {
+      scene.environment = null;
+      environmentMap.dispose();
+      pmremGenerator.dispose();
+    };
+  }, [gl, scene]);
+
+  return null;
 }
 
 interface SceneContainerProps {
@@ -106,7 +125,6 @@ export function SceneContainer({
       fillIntensity: 0.8,
       particles1: '#facc15',
       particles2: '#38bdf8',
-      envPreset: 'sunset' as const,
     },
     sunset: {
       bg: '#fed7aa',
@@ -124,7 +142,6 @@ export function SceneContainer({
       fillIntensity: 1.1,
       particles1: '#ea580c',
       particles2: '#eab308',
-      envPreset: 'sunset' as const,
     },
     night: {
       bg: '#0f172a',
@@ -142,7 +159,6 @@ export function SceneContainer({
       fillIntensity: 0.8,
       particles1: '#38bdf8',
       particles2: '#f59e0b',
-      envPreset: 'city' as const,
     },
   }[timeOfDay];
 
@@ -165,10 +181,8 @@ export function SceneContainer({
           <color attach="background" args={[envConfig.bg]} />
           <fog attach="fog" args={[envConfig.bg, envConfig.fogNear, envConfig.fogFar]} />
 
-          {/* Studio HDR Environment for Specular Gloss & Reflections (Isolated so it never blocks scene) */}
-          <Suspense fallback={null}>
-            <Environment preset={envConfig.envPreset} environmentIntensity={0.65} />
-          </Suspense>
+          {/* Procedural studio environment for specular gloss & reflections (no external HDR download) */}
+          <StudioEnvironment />
 
           {/* Balanced Ambient Lighting - Eliminates Washed Out Look */}
           <ambientLight color={envConfig.ambientColor} intensity={envConfig.ambientIntensity} />

@@ -55,23 +55,47 @@ export function App() {
 
   useEffect(() => {
     let isCancelled = false;
+    let idleCallbackId: number | undefined;
+    let timeoutId: number | undefined;
 
-    void loadSceneContainer()
-      .then(() => {
-        if (isCancelled) return;
-        setIsSceneAvailable(true);
-      })
-      .catch(() => {
-        if (!isCancelled) setIsSceneAvailable(false);
-      })
-      .finally(() => {
-        if (isCancelled) return;
-        achievementsManager.unlock('first_steps');
-        setIsLoading(false);
-      });
+    const startLoadingScene = () => {
+      void loadSceneContainer()
+        .then(() => {
+          if (isCancelled) return;
+          setIsSceneAvailable(true);
+        })
+        .catch(() => {
+          if (!isCancelled) setIsSceneAvailable(false);
+        })
+        .finally(() => {
+          if (isCancelled) return;
+          setIsLoading(false);
+        });
+    };
+
+    const scheduleSceneLoad = () => {
+      if (typeof window.requestIdleCallback === 'function') {
+        idleCallbackId = window.requestIdleCallback(startLoadingScene, { timeout: 1200 });
+      } else {
+        timeoutId = window.setTimeout(startLoadingScene, 200);
+      }
+    };
+
+    if (document.readyState === 'complete') {
+      scheduleSceneLoad();
+    } else {
+      window.addEventListener('load', scheduleSceneLoad, { once: true });
+    }
 
     return () => {
       isCancelled = true;
+      window.removeEventListener('load', scheduleSceneLoad);
+      if (idleCallbackId !== undefined && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (timeoutId !== undefined) {
+        window.clearTimeout(timeoutId);
+      }
     };
   }, []);
 
@@ -109,6 +133,13 @@ export function App() {
       if (scheduledFrame !== 0) window.cancelAnimationFrame(scheduledFrame);
     };
   }, [isMiniGamePlaying]);
+
+  // Unlock "First Steps" only once the visitor actually steps into the studio
+  useEffect(() => {
+    if (activeSection >= 1) {
+      achievementsManager.unlock('first_steps');
+    }
+  }, [activeSection]);
 
   // Global Key Shortcut [G] to launch mini-game, [ESC] to exit
   useEffect(() => {
