@@ -28,29 +28,127 @@ export function ContactOverlay({
     subject: '',
     message: '',
   });
+  const [honeypot, setHoneypot] = useState('');
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [usedMailtoFallback, setUsedMailtoFallback] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const celebrateDispatch = () => {
+    setIsSuccess(true);
+    soundManager.playSuccess();
+
+    confetti({
+      particleCount: 140,
+      spread: 80,
+      origin: { y: 0.6 },
+      colors: ['#8da178', '#ffd166', '#ff9e80', '#70b0d0', '#c68b59'],
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    setSubmitError(null);
+
+    const name = formData.name.trim();
+    const email = formData.email.trim();
+    const subject = formData.subject.trim();
+    const message = formData.message.trim();
+
+    if (!name || !email || !message) {
+      setSubmitError('Please fill in your name, email, and message before dispatching.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setSubmitError('That email address does not look right. Please double-check it.');
+      return;
+    }
+
+    if (honeypot) {
+      celebrateDispatch();
+      return;
+    }
 
     soundManager.playClick();
     setIsSubmitting(true);
 
-    // Simulate sending quest letter
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-      soundManager.playSuccess();
+    const endpoint = import.meta.env.VITE_CONTACT_ENDPOINT;
 
-      // Fire celebratory pastel confetti
-      confetti({
-        particleCount: 140,
-        spread: 80,
-        origin: { y: 0.6 },
-        colors: ['#8da178', '#ffd166', '#ff9e80', '#70b0d0', '#c68b59'],
-      });
-    }, 1100);
+    try {
+      if (endpoint) {
+        const response = await fetch(endpoint, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            name,
+            email,
+            subject: subject || `Quest proposal from ${name}`,
+            message,
+            _subject: `[Portfolio] ${subject || `Quest proposal from ${name}`}`,
+            _gotcha: honeypot,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`Request failed with status ${response.status}`);
+        }
+        setUsedMailtoFallback(false);
+      } else {
+        const mailSubject = encodeURIComponent(subject || `Quest proposal from ${name}`);
+        const mailBody = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+        window.location.href = `mailto:${personalInfo.socials.email}?subject=${mailSubject}&body=${mailBody}`;
+        setUsedMailtoFallback(true);
+      }
+
+      celebrateDispatch();
+    } catch {
+      setSubmitError(
+        `The carrier pigeon got lost in the clouds. Please try again, or email me directly at ${personalInfo.socials.email}.`
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const { socials } = personalInfo;
+
+  type SocialLink = { key: string; label: string; href: string; icon: React.ReactNode };
+
+  const socialLinks: SocialLink[] = [];
+  if (socials.github) {
+    socialLinks.push({
+      key: 'github',
+      label: 'GitHub',
+      href: socials.github,
+      icon: <Code2 className="w-4 h-4 text-[#8da178]" />,
+    });
+  }
+  if (socials.linkedin) {
+    socialLinks.push({
+      key: 'linkedin',
+      label: 'LinkedIn',
+      href: socials.linkedin,
+      icon: <Globe className="w-4 h-4 text-[#70b0d0]" />,
+    });
+  }
+  if (socials.twitter) {
+    socialLinks.push({
+      key: 'twitter',
+      label: 'Twitter / X',
+      href: socials.twitter,
+      icon: <Share2 className="w-4 h-4 text-[#ffd166]" />,
+    });
+  }
+  if (socials.discord) {
+    socialLinks.push({
+      key: 'discord',
+      label: 'Discord',
+      href: socials.discord,
+      icon: <MessageSquare className="w-4 h-4 text-[#ff9e80]" />,
+    });
+  }
 
   return (
     <section
@@ -92,11 +190,15 @@ export function ContactOverlay({
                   Carrier Pigeon Dispatched!
                 </h3>
                 <p className="text-sm sm:text-base text-[#5c4a3f] max-w-md font-medium leading-relaxed">
-                  Your quest proposal has been sealed and delivered to Hoang Duc Lam. Expect a friendly reply within 24 hours.
+                  {usedMailtoFallback
+                    ? 'Your email app should have opened with the quest proposal pre-filled — just press send and it will reach Hoang Duc Lam.'
+                    : 'Your quest proposal has been sealed and delivered to Hoang Duc Lam. Expect a friendly reply within 24 hours.'}
                 </p>
                 <button
                   onClick={() => {
                     setIsSuccess(false);
+                    setUsedMailtoFallback(false);
+                    setSubmitError(null);
                     setFormData({ name: '', email: '', subject: '', message: '' });
                   }}
                   className="mt-4 px-6 py-2.5 rounded-2xl bg-[#f4ebe1] hover:bg-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] border border-[#e6d8cb] cursor-pointer shadow-sm"
@@ -106,6 +208,17 @@ export function ContactOverlay({
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <input
+                  type="text"
+                  name="_gotcha"
+                  value={honeypot}
+                  onChange={(e) => setHoneypot(e.target.value)}
+                  className="hidden"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  aria-hidden="true"
+                />
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-heading font-bold text-[#786558] uppercase mb-1.5">
@@ -171,6 +284,15 @@ export function ContactOverlay({
                   />
                 </div>
 
+                {submitError && (
+                  <p
+                    role="alert"
+                    className="text-xs text-[#e76f51] font-heading font-bold bg-[#ff9e80]/10 border border-[#ff9e80]/40 rounded-2xl px-4 py-3"
+                  >
+                    {submitError}
+                  </p>
+                )}
+
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -224,49 +346,19 @@ export function ContactOverlay({
             </h4>
 
             <div className="grid grid-cols-2 gap-3">
-              <a
-                href={personalInfo.socials.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => soundManager.playClick()}
-                className="flex items-center gap-2 p-3.5 rounded-2xl bg-[#fbf4eb] hover:bg-[#f4ebe1] border border-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] transition-colors shadow-sm"
-              >
-                <Code2 className="w-4 h-4 text-[#8da178]" />
-                <span>GitHub</span>
-              </a>
-
-              <a
-                href={personalInfo.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => soundManager.playClick()}
-                className="flex items-center gap-2 p-3.5 rounded-2xl bg-[#fbf4eb] hover:bg-[#f4ebe1] border border-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] transition-colors shadow-sm"
-              >
-                <Globe className="w-4 h-4 text-[#70b0d0]" />
-                <span>LinkedIn</span>
-              </a>
-
-              <a
-                href={personalInfo.socials.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => soundManager.playClick()}
-                className="flex items-center gap-2 p-3.5 rounded-2xl bg-[#fbf4eb] hover:bg-[#f4ebe1] border border-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] transition-colors shadow-sm"
-              >
-                <Share2 className="w-4 h-4 text-[#ffd166]" />
-                <span>Twitter / X</span>
-              </a>
-
-              <a
-                href={personalInfo.socials.discord}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => soundManager.playClick()}
-                className="flex items-center gap-2 p-3.5 rounded-2xl bg-[#fbf4eb] hover:bg-[#f4ebe1] border border-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] transition-colors shadow-sm"
-              >
-                <MessageSquare className="w-4 h-4 text-[#ff9e80]" />
-                <span>Discord</span>
-              </a>
+              {socialLinks.map((link) => (
+                <a
+                  key={link.key}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => soundManager.playClick()}
+                  className="flex items-center gap-2 p-3.5 rounded-2xl bg-[#fbf4eb] hover:bg-[#f4ebe1] border border-[#e6d8cb] text-xs font-heading font-bold text-[#38271e] transition-colors shadow-sm"
+                >
+                  {link.icon}
+                  <span>{link.label}</span>
+                </a>
+              ))}
             </div>
           </div>
         </div>

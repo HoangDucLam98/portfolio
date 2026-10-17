@@ -1,8 +1,8 @@
-import type { ProjectItem } from '../types';
+import type { PersonalInfo, ProjectItem } from '../types';
 
 const baseUrl = import.meta.env.BASE_URL || '/';
 
-export const personalInfo = {
+export const personalInfo: PersonalInfo = {
   name: "Hoang Duc Lam",
   title: "Gameplay Programmer & Technical 3D Game Artist",
   tagline: "Crafting wholesome, physics-driven 3D worlds, mobile game mechanics, and engaging gameplay experiences.",
@@ -37,10 +37,7 @@ export const personalInfo = {
   ],
   socials: {
     github: "https://github.com/HoangDucLam98",
-    linkedin: "https://linkedin.com",
-    twitter: "https://twitter.com",
-    email: "lamhd98@gmail.com",
-    discord: "https://discord.com"
+    email: "lamhd98@gmail.com"
   }
 };
 
@@ -65,7 +62,6 @@ export const projectsData: ProjectItem[] = [
       { label: "Frame Rate", value: "60 FPS Locked" }
     ],
     liveUrl: "https://play.google.com/store/apps/details?id=com.color.flow.puzzle",
-    githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#8da178",
     glowColor: "rgba(141, 161, 120, 0.4)",
     imageUrl: `${baseUrl}games/color-flow-sand-art.webp`,
@@ -97,7 +93,6 @@ export const projectsData: ProjectItem[] = [
       { label: "Play Time", value: "Endless Roguelike" }
     ],
     liveUrl: "https://apkpure.com/vn/survival-hero-action-rpg-game/com.nmg.survivalhero",
-    githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#ff8a80",
     glowColor: "rgba(255, 138, 128, 0.4)",
     imageUrl: `${baseUrl}games/survival-hero.webp`,
@@ -129,7 +124,6 @@ export const projectsData: ProjectItem[] = [
       { label: "Performance", value: "Solid 60 FPS" }
     ],
     liveUrl: "https://play.google.com/store/apps/details?id=com.supermarket.journey",
-    githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#ffd166",
     glowColor: "rgba(255, 209, 102, 0.4)",
     imageUrl: `${baseUrl}games/supermarket-journey.webp`,
@@ -161,7 +155,6 @@ export const projectsData: ProjectItem[] = [
       { label: "Shader Pass", value: "Custom Occlusion" }
     ],
     liveUrl: "https://play.google.com/store/apps/details?id=com.prison.escape.journey.simulator",
-    githubUrl: "https://github.com/HoangDucLam98/portfolio",
     color: "#70b0d0",
     glowColor: "rgba(112, 176, 208, 0.4)",
     imageUrl: `${baseUrl}games/prison-escape.webp`,

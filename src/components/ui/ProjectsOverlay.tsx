@@ -151,17 +151,19 @@ export function ProjectsOverlay({
                 <span>VIEW SPECS & GALLERY</span>
               </button>
 
-              <a
-                href={currentProject.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => soundManager.playClick()}
-                className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-sm"
-              >
-                <Play className="w-4 h-4 fill-current text-[#8da178]" />
-                <span>OFFICIAL STORE PAGE</span>
-                <ExternalLink className="w-3 h-3 text-[#786558]" />
-              </a>
+              {currentProject.liveUrl && (
+                <a
+                  href={currentProject.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => soundManager.playClick()}
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-xs tracking-wider uppercase transition-all shadow-sm"
+                >
+                  <Play className="w-4 h-4 fill-current text-[#8da178]" />
+                  <span>OFFICIAL STORE PAGE</span>
+                  <ExternalLink className="w-3 h-3 text-[#786558]" />
+                </a>
+              )}
             </div>
           </motion.div>
         </div>

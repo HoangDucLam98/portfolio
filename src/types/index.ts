@@ -15,8 +15,9 @@ export interface ProjectItem {
   metrics: ProjectMetric[];
   features: string[];
   techStack: string[];
-  liveUrl: string;
-  githubUrl: string;
+  liveUrl?: string;
+  githubUrl?: string;
+  trailerUrl?: string;
   color: string;
   glowColor?: string;
   imageUrl: string;
@@ -52,9 +53,9 @@ export interface PersonalInfo {
   }[];
   socials: {
     github: string;
-    linkedin: string;
-    twitter: string;
-    discord: string;
+    linkedin?: string;
+    twitter?: string;
+    discord?: string;
     email: string;
   };
   stats: {
