@@ -66,6 +66,19 @@ A "Trailer" tab automatically appears in the project modal next to the screensho
 
 Edit `personalInfo.socials` in `src/data/portfolioData.ts`. Empty/omitted entries are hidden automatically.
 
+### Resume / CV
+
+The downloadable resume lives at `public/HoangDucLam_CV.pdf`, generated from the template `cv/hoang-duc-lam-cv.html`. To regenerate after editing the template:
+
+```bash
+"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+  --headless=new --no-pdf-header-footer --no-sandbox \
+  --print-to-pdf=public/HoangDucLam_CV.pdf \
+  "file://$PWD/cv/hoang-duc-lam-cv.html"
+```
+
+"Download CV" buttons in the hero and contact sections link to it automatically via `import.meta.env.BASE_URL`.
+
 ## Project Structure
 
 ```

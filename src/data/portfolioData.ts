@@ -18,21 +18,21 @@ export const personalInfo: PersonalInfo = {
   experience: [
     {
       period: "2023 — Present",
-      role: "Lead Gameplay Programmer",
-      company: "Mobile Game Studio",
-      description: "Architected core gameplay mechanics, custom character controllers, AI crowd systems, and UI pipelines for published 3D mobile titles with over 500k+ organic downloads."
+      role: "Gameplay Programmer & Technical Artist",
+      company: "Self-Published Mobile Titles",
+      description: "Designed, programmed and shipped the four 3D mobile titles featured below on Google Play and APKPure (500k+ organic downloads) — owning gameplay code, physics, custom shaders, performance optimization and store deployment end-to-end."
     },
     {
       period: "2021 — 2023",
-      role: "Game Developer & Technical Artist",
-      company: "Indie Game Lab",
-      description: "Developed custom shaders, particle VFX, ragdoll physics solvers, and mobile render pipeline (URP) optimizations to guarantee locked 60 FPS across low-end to flagship mobile devices."
+      role: "Freelance Game Developer & Technical Artist",
+      company: "Freelance / Contract Work",
+      description: "Built custom shaders, particle VFX, ragdoll physics solvers and mobile URP render pipeline optimizations for client prototypes and indie teams, targeting a locked 60 FPS on low-end to flagship devices."
     },
     {
       period: "2019 — 2021",
-      role: "Junior Unity Game Programmer",
-      company: "Interactive Play Labs",
-      description: "Implemented state machines, touch gesture input handlers, level progression systems, audio pipelines, and Google Play Store SDK integrations."
+      role: "Unity Game Programmer",
+      company: "Independent Projects & Game Jams",
+      description: "Developed state machines, touch gesture input handlers, level progression systems, audio pipelines and Google Play SDK integrations across personal projects and collaborative game jams."
     }
   ],
   socials: {

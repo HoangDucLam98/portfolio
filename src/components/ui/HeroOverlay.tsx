@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
-import { Sparkles, Gamepad2, Play, BookOpen, Layers } from 'lucide-react';
+import { Sparkles, Gamepad2, Play, BookOpen, Layers, FileDown } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
 import { soundManager } from '../../audio/audioEngine';
+
+const baseUrl = import.meta.env.BASE_URL || '/';
+const cvUrl = `${baseUrl}HoangDucLam_CV.pdf`;
 
 interface HeroOverlayProps {
   onExplore: () => void;
@@ -23,7 +26,7 @@ export function HeroOverlay({ onExplore, onOpenContact }: HeroOverlayProps) {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#8da178] mb-6 shadow-sm pointer-events-auto"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#526545] mb-6 shadow-sm pointer-events-auto"
           >
             <span className="w-2.5 h-2.5 rounded-full bg-[#8da178] animate-ping" />
             <span>{personalInfo.availability}</span>
@@ -83,6 +86,17 @@ export function HeroOverlay({ onExplore, onOpenContact }: HeroOverlayProps) {
               <Sparkles className="w-4 h-4 text-[#ff9e80]" />
               <span>Visit Campfire</span>
             </button>
+
+            <a
+              href={cvUrl}
+              download="HoangDucLam_CV.pdf"
+              onClick={() => soundManager.playClick()}
+              onMouseEnter={() => soundManager.playHover()}
+              className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-white border-2 border-[#e6d8cb] hover:border-[#8da178] text-[#38271e] font-heading font-extrabold text-sm tracking-wider uppercase transition-all cursor-pointer shadow-md"
+            >
+              <FileDown className="w-4 h-4 text-[#70b0d0]" />
+              <span>Download CV</span>
+            </a>
           </motion.div>
         </div>
 

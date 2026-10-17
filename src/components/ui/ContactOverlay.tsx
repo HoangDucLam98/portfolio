@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import confetti from 'canvas-confetti';
-import { Send, Mail, MapPin, Sparkles, CheckCircle2, MessageSquare, ArrowUp, Code2, Globe, Share2 } from 'lucide-react';
+import { Send, Mail, MapPin, Sparkles, CheckCircle2, MessageSquare, ArrowUp, Code2, Globe, Share2, FileDown } from 'lucide-react';
 import { personalInfo } from '../../data/portfolioData';
 import { soundManager } from '../../audio/audioEngine';
+
+const cvUrl = `${import.meta.env.BASE_URL || '/'}HoangDucLam_CV.pdf`;
 
 interface ContactOverlayProps {
   isSubmitting: boolean;
@@ -157,7 +159,7 @@ export function ContactOverlay({
     >
       {/* Top Header */}
       <div>
-        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#8da178] mb-3 shadow-sm">
+        <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white border-2 border-[#e6d8cb] text-xs font-heading font-bold text-[#526545] mb-3 shadow-sm">
           <Sparkles className="w-3.5 h-3.5" />
           <span>STATION 05 // COZY CAMPFIRE BEACON</span>
         </div>
@@ -319,9 +321,9 @@ export function ContactOverlay({
         <div className="lg:col-span-5 flex flex-col gap-4 pointer-events-auto">
           {/* Coordinates Card */}
           <div className="p-6 sm:p-8 rounded-3xl glass-panel border-2 border-[#e6d8cb] flex flex-col gap-4 bg-white/95 shadow-md">
-            <h4 className="text-xs font-heading font-extrabold text-[#8da178] uppercase tracking-widest">
+            <h3 className="text-xs font-heading font-extrabold text-[#526545] uppercase tracking-widest">
               STUDIO COORDINATES
-            </h4>
+            </h3>
 
             <div className="flex items-center gap-3 text-xs sm:text-sm text-[#38271e]">
               <Mail className="w-4 h-4 text-[#8da178] shrink-0" />
@@ -337,13 +339,23 @@ export function ContactOverlay({
               <MapPin className="w-4 h-4 text-[#e76f51] shrink-0" />
               <span className="font-mono">{personalInfo.location}</span>
             </div>
+
+            <a
+              href={cvUrl}
+              download="HoangDucLam_CV.pdf"
+              onClick={() => soundManager.playClick()}
+              className="flex items-center gap-3 text-xs sm:text-sm text-[#38271e] hover:text-[#8da178] transition-colors font-mono font-bold"
+            >
+              <FileDown className="w-4 h-4 text-[#70b0d0] shrink-0" />
+              <span>Download Resume (PDF)</span>
+            </a>
           </div>
 
           {/* Social Matrix */}
           <div className="p-6 sm:p-8 rounded-3xl glass-panel border-2 border-[#e6d8cb] flex flex-col gap-4 bg-white/95 shadow-md">
-            <h4 className="text-xs font-heading font-extrabold text-[#e76f51] uppercase tracking-widest">
+            <h3 className="text-xs font-heading font-extrabold text-[#bc4b2d] uppercase tracking-widest">
               GUILD CHANNELS
-            </h4>
+            </h3>
 
             <div className="grid grid-cols-2 gap-3">
               {socialLinks.map((link) => (
@@ -375,7 +387,7 @@ export function ContactOverlay({
             soundManager.playWhoosh();
             onScrollToTop();
           }}
-          className="flex items-center gap-1.5 font-heading font-bold text-[#e76f51] hover:text-[#38271e] transition-colors cursor-pointer"
+          className="flex items-center gap-1.5 font-heading font-bold text-[#a63e24] hover:text-[#38271e] transition-colors cursor-pointer"
         >
           <span>RETURN TO STUDIO</span>
           <ArrowUp className="w-3.5 h-3.5" />
