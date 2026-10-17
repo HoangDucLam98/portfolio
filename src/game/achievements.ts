@@ -68,6 +68,9 @@ export const INITIAL_ACHIEVEMENTS: Achievement[] = [
 
 type AchievementListener = (achievement: Achievement) => void;
 
+const ACHIEVEMENTS_STORAGE_KEY = 'sproutling_achievements';
+const META_STORAGE_KEY = 'sproutling_achievements_meta';
+
 class AchievementsManager {
   private achievements: Achievement[] = [];
   private listeners: AchievementListener[] = [];
@@ -80,7 +83,7 @@ class AchievementsManager {
 
   private load() {
     try {
-      const saved = localStorage.getItem('sproutling_achievements');
+      const saved = localStorage.getItem(ACHIEVEMENTS_STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
         this.achievements = INITIAL_ACHIEVEMENTS.map((item) => {
@@ -90,6 +93,19 @@ class AchievementsManager {
       } else {
         this.achievements = [...INITIAL_ACHIEVEMENTS];
       }
+
+      const savedMeta = localStorage.getItem(META_STORAGE_KEY);
+      if (savedMeta) {
+        const parsedMeta = JSON.parse(savedMeta);
+        if (typeof parsedMeta.coffeeClicks === 'number') {
+          this.coffeeClicks = parsedMeta.coffeeClicks;
+        }
+        if (Array.isArray(parsedMeta.viewedProjects)) {
+          this.viewedProjects = new Set(
+            parsedMeta.viewedProjects.filter((id: unknown): id is string => typeof id === 'string')
+          );
+        }
+      }
     } catch {
       this.achievements = [...INITIAL_ACHIEVEMENTS];
     }
@@ -97,7 +113,21 @@ class AchievementsManager {
 
   private save() {
     try {
-      localStorage.setItem('sproutling_achievements', JSON.stringify(this.achievements));
+      localStorage.setItem(ACHIEVEMENTS_STORAGE_KEY, JSON.stringify(this.achievements));
+    } catch {
+      // ignore
+    }
+  }
+
+  private saveMeta() {
+    try {
+      localStorage.setItem(
+        META_STORAGE_KEY,
+        JSON.stringify({
+          coffeeClicks: this.coffeeClicks,
+          viewedProjects: [...this.viewedProjects],
+        })
+      );
     } catch {
       // ignore
     }
@@ -135,6 +165,7 @@ class AchievementsManager {
   // Trigger Helpers
   public trackCoffeeClick() {
     this.coffeeClicks += 1;
+    this.saveMeta();
     if (this.coffeeClicks >= 3) {
       this.unlock('coffee_lover');
     }
@@ -142,6 +173,7 @@ class AchievementsManager {
 
   public trackProjectView(projectId: string) {
     this.viewedProjects.add(projectId);
+    this.saveMeta();
     if (this.viewedProjects.size >= 4) {
       this.unlock('game_explorer');
     }

@@ -34,13 +34,18 @@ export function SproutlingPlayer({ isPlaying, onStarsCountChange, onWin }: Sprou
   const isGrounded = useRef(true);
   const facingAngle = useRef(0);
   const keys = useRef<{ [key: string]: boolean }>({});
+  const onStarsCountChangeRef = useRef(onStarsCountChange);
+
+  useEffect(() => {
+    onStarsCountChangeRef.current = onStarsCountChange;
+  });
 
   useEffect(() => {
     if (!isPlaying) return;
 
     // Reset stars when game starts
     setStars(INITIAL_STARS.map((s) => ({ ...s, collected: false })));
-    onStarsCountChange(0, 5);
+    onStarsCountChangeRef.current(0, 5);
     pos.current.set(0, 0.6, 0.3);
     vel.current.set(0, 0, 0);
 

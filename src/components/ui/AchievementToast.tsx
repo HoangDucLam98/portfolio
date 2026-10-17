@@ -20,7 +20,8 @@ export function AchievementToast() {
   }, []);
 
   return (
-    <AnimatePresence>
+    <div aria-live="polite" role="status">
+      <AnimatePresence>
       {current && (
         <motion.div
           initial={{ opacity: 0, y: -60, scale: 0.9 }}
@@ -55,6 +56,7 @@ export function AchievementToast() {
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+      </AnimatePresence>
+    </div>
   );
 }

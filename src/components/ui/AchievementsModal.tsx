@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Trophy, Sparkles, CheckCircle2, Lock } from 'lucide-react';
 import { achievementsManager, type Achievement } from '../../game/achievements';
 import { soundManager } from '../../audio/audioEngine';
+import { useModalA11y } from '../../hooks/useModalA11y';
 
 interface AchievementsModalProps {
   isOpen: boolean;
@@ -11,6 +12,13 @@ interface AchievementsModalProps {
 
 export function AchievementsModal({ isOpen, onClose }: AchievementsModalProps) {
   const [achievements, setAchievements] = useState<Achievement[]>([]);
+
+  const handleClose = () => {
+    soundManager.playCloseModal();
+    onClose();
+  };
+
+  const containerRef = useModalA11y<HTMLDivElement>(isOpen, handleClose);
 
   useEffect(() => {
     if (isOpen) {
@@ -31,20 +39,22 @@ export function AchievementsModal({ isOpen, onClose }: AchievementsModalProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          onClick={() => {
-            soundManager.playCloseModal();
-            onClose();
-          }}
+          onClick={handleClose}
           className="fixed inset-0 bg-black/40 backdrop-blur-md"
         />
 
         {/* Modal Content */}
         <motion.div
+          ref={containerRef}
+          tabIndex={-1}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Studio achievements"
           initial={{ opacity: 0, scale: 0.92, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.92, y: 20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl glass-panel-glow border-2 border-[#8da178] p-6 sm:p-8 shadow-2xl bg-white text-[#38271e] flex flex-col gap-6"
+          className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-3xl glass-panel-glow border-2 border-[#8da178] p-6 sm:p-8 shadow-2xl bg-white text-[#38271e] flex flex-col gap-6 outline-none"
         >
           {/* Header */}
           <div className="flex items-start justify-between border-b-2 border-[#e6d8cb] pb-5">
@@ -63,10 +73,8 @@ export function AchievementsModal({ isOpen, onClose }: AchievementsModalProps) {
             </div>
 
             <button
-              onClick={() => {
-                soundManager.playCloseModal();
-                onClose();
-              }}
+              onClick={handleClose}
+              aria-label="Close achievements"
               className="p-2.5 rounded-2xl bg-[#f4ebe1] hover:bg-[#e6d8cb] border border-[#e6d8cb] text-[#38271e] transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />

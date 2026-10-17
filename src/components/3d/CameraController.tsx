@@ -36,6 +36,10 @@ const STATIONS = [
   },
 ];
 
+const prefersReducedMotion =
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 export function CameraController() {
   const { camera, pointer } = useThree();
   const currentCamPos = useRef(new THREE.Vector3(0, 2.2, 6.2));
@@ -53,9 +57,9 @@ export function CameraController() {
     const factor = rawIndex - startIndex;
     const smoothFactor = factor * factor * (3 - 2 * factor);
 
-    // Add subtle mouse parallax
-    const parallaxX = pointer.x * 0.35;
-    const parallaxY = pointer.y * 0.22;
+    // Add subtle mouse parallax (disabled for reduced-motion users)
+    const parallaxX = prefersReducedMotion ? 0 : pointer.x * 0.35;
+    const parallaxY = prefersReducedMotion ? 0 : pointer.y * 0.22;
 
     desiredCamPos.lerpVectors(STATIONS[startIndex].cam, STATIONS[endIndex].cam, smoothFactor);
     desiredCamPos.x += parallaxX;

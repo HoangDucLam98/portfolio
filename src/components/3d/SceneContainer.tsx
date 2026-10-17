@@ -23,6 +23,11 @@ function shouldUseLowPowerRendering() {
   );
 }
 
+function prefersReducedMotion() {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 interface SceneContainerProps {
   activeSection: number;
   timeOfDay: TimeOfDay;
@@ -63,6 +68,7 @@ export function SceneContainer({
   isContactFocused,
 }: SceneContainerProps) {
   const [isLowPowerDevice, setIsLowPowerDevice] = useState(shouldUseLowPowerRendering);
+  const [isReducedMotion, setIsReducedMotion] = useState(prefersReducedMotion);
 
   useEffect(() => {
     const updateRenderingProfile = () => setIsLowPowerDevice(shouldUseLowPowerRendering());
@@ -70,8 +76,17 @@ export function SceneContainer({
     return () => window.removeEventListener('resize', updateRenderingProfile);
   }, []);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const handleChange = () => setIsReducedMotion(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+
   const dpr: [number, number] = isLowPowerDevice ? [1, 1.25] : [1, 1.5];
   const shadowMapSize = isLowPowerDevice ? 512 : 1024;
+  const primaryParticleCount = isReducedMotion ? 16 : isLowPowerDevice ? 60 : 140;
+  const secondaryParticleCount = isReducedMotion ? 8 : isLowPowerDevice ? 30 : 60;
 
   // Vibrant, high-contrast Lighting & Color settings based on Time of Day
   const envConfig = {
@@ -198,8 +213,8 @@ export function SceneContainer({
 
           {/* Global Floor and Stardust */}
           <CyberGrid />
-          <FloatingParticles count={isLowPowerDevice ? 60 : 140} color={envConfig.particles1} size={0.045} />
-          <FloatingParticles count={isLowPowerDevice ? 30 : 60} color={envConfig.particles2} size={0.05} />
+          <FloatingParticles count={primaryParticleCount} color={envConfig.particles1} size={0.045} />
+          <FloatingParticles count={secondaryParticleCount} color={envConfig.particles2} size={0.05} />
 
           {/* Section 0 & 1: 3D Workspace Scene */}
           {(activeSection === 0 || activeSection === 1) && (
